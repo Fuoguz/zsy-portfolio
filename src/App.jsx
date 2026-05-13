@@ -337,14 +337,7 @@ function App() {
               <a href="mailto:fuoguzz@gmail.com" className="primary-action">
                 Email Me <Mail size={16} />
               </a>
-              <a
-                href="/zsy-portfolio/resume.pdf"
-                target="_blank"
-                rel="noreferrer"
-                className="secondary-action"
-              >
-                查看简历 PDF <ArrowUpRight size={16} />
-              </a>
+              
               <a
                 href="https://github.com/Fuoguz"
                 target="_blank"

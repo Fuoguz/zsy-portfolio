@@ -1,15 +1,28 @@
 @import "tailwindcss";
 
 :root {
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  color: #f8fafc;
-  background: #030712;
+  --ink: #050505;
+  --ink-2: #0b0b0a;
+  --paper: #f4f0e6;
+  --paper-soft: #ded8c8;
+  --silver: #c9c9c2;
+  --muted: #8c8c84;
+  --acid: #d8ff3f;
+  --acid-soft: rgba(216, 255, 63, 0.16);
+  --line: rgba(244, 240, 230, 0.14);
+  --line-strong: rgba(244, 240, 230, 0.24);
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  color: var(--paper);
+  background: var(--ink);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 }
 
 html {
   scroll-behavior: smooth;
+  background: var(--ink);
 }
 
 body {
@@ -17,11 +30,443 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background:
-    radial-gradient(circle at top left, rgba(34, 211, 238, 0.16), transparent 30%),
-    radial-gradient(circle at top right, rgba(59, 130, 246, 0.12), transparent 28%),
-    linear-gradient(135deg, #020617 0%, #030712 45%, #0f172a 100%);
+    linear-gradient(rgba(244, 240, 230, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(244, 240, 230, 0.045) 1px, transparent 1px),
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.018) 0,
+      rgba(255, 255, 255, 0.018) 1px,
+      transparent 1px,
+      transparent 7px
+    ),
+    #050505;
+  background-size: 96px 96px, 96px 96px, auto, auto;
+}
+
+body::before {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  content: "";
+  background:
+    linear-gradient(115deg, transparent 0%, rgba(244, 240, 230, 0.045) 42%, transparent 58%),
+    linear-gradient(180deg, rgba(5, 5, 5, 0.2), rgba(5, 5, 5, 0.88));
+  mix-blend-mode: screen;
+}
+
+body::after {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  content: "";
+  opacity: 0.23;
+  background-image:
+    repeating-linear-gradient(90deg, transparent 0 13px, rgba(244, 240, 230, 0.055) 13px 14px),
+    repeating-linear-gradient(0deg, transparent 0 17px, rgba(244, 240, 230, 0.035) 17px 18px);
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), transparent 72%);
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
 }
 
 ::selection {
-  background: rgba(34, 211, 238, 0.3);
+  color: var(--ink);
+  background: var(--acid);
+}
+
+#root {
+  position: relative;
+  z-index: 1;
+}
+
+.archive-surface {
+  position: relative;
+}
+
+.archive-surface::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  content: "";
+  background: linear-gradient(90deg, transparent, var(--line-strong), transparent);
+}
+
+.hero-shell {
+  position: relative;
+  min-height: 100vh;
+}
+
+.nav-link {
+  position: relative;
+  transition:
+    color 220ms ease,
+    opacity 220ms ease;
+}
+
+.nav-link::after {
+  position: absolute;
+  right: 0;
+  bottom: -6px;
+  left: 0;
+  height: 1px;
+  content: "";
+  background: var(--acid);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 220ms ease;
+}
+
+.nav-link:hover {
+  color: var(--paper);
+}
+
+.nav-link:hover::after {
+  transform: scaleX(1);
+}
+
+.status-tag,
+.mini-tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 11px;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--paper);
+  background: rgba(244, 240, 230, 0.035);
+}
+
+.status-tag {
+  padding: 0 12px;
+  box-shadow: inset 0 0 0 1px rgba(216, 255, 63, 0.06);
+}
+
+.mini-tag {
+  padding: 0 10px;
+  color: var(--silver);
+}
+
+.primary-action,
+.secondary-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  border-radius: 8px;
+  padding: 0 18px;
+  font-size: 14px;
+  font-weight: 700;
+  transition:
+    transform 220ms ease,
+    border-color 220ms ease,
+    background-color 220ms ease,
+    color 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.primary-action {
+  color: var(--ink);
+  background: var(--paper);
+}
+
+.primary-action:hover {
+  transform: translateY(-2px);
+  background: var(--acid);
+  box-shadow: 0 0 32px rgba(216, 255, 63, 0.18);
+}
+
+.secondary-action {
+  border: 1px solid var(--line-strong);
+  color: var(--paper);
+  background: rgba(244, 240, 230, 0.025);
+}
+
+.secondary-action:hover {
+  transform: translateY(-2px);
+  border-color: rgba(216, 255, 63, 0.72);
+  color: var(--acid);
+}
+
+.hero-ledger {
+  align-self: end;
+  border-top: 1px solid var(--line-strong);
+  border-bottom: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(244, 240, 230, 0.045), rgba(244, 240, 230, 0.015));
+}
+
+.ledger-row {
+  display: grid;
+  grid-template-columns: 0.45fr 1fr;
+  gap: 18px;
+  border-bottom: 1px solid var(--line);
+  padding: 18px 0;
+}
+
+.ledger-row span,
+.ledger-mark p {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 12px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.ledger-row strong {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--paper);
+}
+
+.ledger-mark {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 18px;
+  align-items: end;
+  padding: 28px 0 6px;
+}
+
+.ledger-mark span {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: clamp(4rem, 14vw, 9rem);
+  line-height: 0.8;
+  color: var(--acid);
+}
+
+.focus-band,
+.contact-band {
+  position: relative;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: rgba(244, 240, 230, 0.025);
+}
+
+.section-shell {
+  width: min(100% - 40px, 1280px);
+  margin: 0 auto;
+  padding: 104px 0;
+}
+
+.section-header {
+  max-width: 760px;
+  margin-bottom: 42px;
+}
+
+.section-eyebrow {
+  margin-bottom: 14px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 12px;
+  text-transform: uppercase;
+  color: var(--acid);
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: clamp(2.4rem, 5vw, 5rem);
+  font-weight: 650;
+  line-height: 1;
+  color: var(--paper);
+}
+
+.section-desc {
+  max-width: 650px;
+  margin-top: 18px;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.evidence-card {
+  position: relative;
+  min-height: 430px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 24px;
+  background:
+    linear-gradient(180deg, rgba(244, 240, 230, 0.05), rgba(244, 240, 230, 0.018)),
+    rgba(5, 5, 5, 0.8);
+  transition:
+    transform 260ms ease,
+    border-color 260ms ease,
+    background-color 260ms ease,
+    box-shadow 260ms ease;
+}
+
+.evidence-card::before {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  content: "";
+  background:
+    linear-gradient(90deg, rgba(216, 255, 63, 0.16), transparent 26%),
+    linear-gradient(180deg, rgba(244, 240, 230, 0.08), transparent 24%);
+  opacity: 0;
+  transition: opacity 260ms ease;
+}
+
+.evidence-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(216, 255, 63, 0.52);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.38);
+}
+
+.evidence-card:hover::before {
+  opacity: 1;
+}
+
+.card-number {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 15px;
+  color: var(--acid);
+}
+
+.evidence-card h3 {
+  margin: 0;
+  max-width: 520px;
+  font-size: clamp(1.7rem, 3vw, 2.75rem);
+  font-weight: 650;
+  line-height: 1.05;
+  color: var(--paper);
+}
+
+.evidence-list {
+  display: grid;
+  gap: 0;
+  margin: 34px 0 34px;
+}
+
+.evidence-list div {
+  display: grid;
+  grid-template-columns: 86px 1fr;
+  gap: 18px;
+  border-top: 1px solid var(--line);
+  padding: 15px 0;
+}
+
+.evidence-list dt {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 12px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.evidence-list dd {
+  margin: 0;
+  color: var(--paper-soft);
+  line-height: 1.65;
+}
+
+.matrix-card,
+.workflow-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(244, 240, 230, 0.025);
+  transition:
+    transform 220ms ease,
+    border-color 220ms ease,
+    background-color 220ms ease;
+}
+
+.matrix-card {
+  min-height: 270px;
+  padding: 22px;
+}
+
+.matrix-card:hover,
+.workflow-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(216, 255, 63, 0.5);
+  background: rgba(244, 240, 230, 0.045);
+}
+
+.matrix-icon {
+  display: flex;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 36px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  color: var(--acid);
+  background: rgba(216, 255, 63, 0.065);
+}
+
+.matrix-card h3,
+.workflow-card h3 {
+  margin: 14px 0 0;
+  font-size: 21px;
+  font-weight: 650;
+  color: var(--paper);
+}
+
+.matrix-card p,
+.workflow-card p {
+  color: var(--muted);
+  line-height: 1.75;
+}
+
+.workflow-rail {
+  border-top: 1px solid var(--line-strong);
+  padding-top: 24px;
+}
+
+.workflow-card {
+  min-height: 240px;
+  padding: 20px;
+}
+
+.workflow-number {
+  margin: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 13px;
+  color: var(--acid);
+}
+
+.contact-panel {
+  border-left: 1px solid var(--line-strong);
+  padding-left: 26px;
+  color: var(--paper-soft);
+  font-size: 17px;
+  line-height: 1.8;
+}
+
+@media (max-width: 768px) {
+  .section-shell {
+    width: min(100% - 32px, 1280px);
+    padding: 78px 0;
+  }
+
+  .hero-ledger {
+    align-self: stretch;
+  }
+
+  .ledger-row,
+  .ledger-mark,
+  .evidence-list div {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .evidence-card,
+  .matrix-card,
+  .workflow-card {
+    min-height: auto;
+  }
+
+  .contact-panel {
+    border-left: 0;
+    border-top: 1px solid var(--line-strong);
+    padding-top: 24px;
+    padding-left: 0;
+  }
 }

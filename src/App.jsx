@@ -796,7 +796,7 @@ function HomePage() {
               Creative Evidence Lab
             </p>
             <h1 className="max-w-5xl text-5xl font-semibold leading-[0.98] text-[var(--paper)] md:text-7xl lg:text-8xl">
-              ZSY builds proof of creative process.
+              Zhang Shaoyi builds proof of creative process.
             </h1>
 
             <div className="mt-8 grid gap-5 border-l border-[var(--line)] pl-5 text-base leading-8 text-[var(--silver)] md:max-w-3xl md:text-lg">

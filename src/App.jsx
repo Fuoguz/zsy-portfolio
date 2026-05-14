@@ -765,7 +765,7 @@ function HomePage() {
       <nav className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[rgba(5,5,5,0.76)] backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 md:px-8">
           <a href="#home" className="font-mono text-sm uppercase text-[var(--paper)]">
-            ZSY / Evidence Lab
+            Zhang Shaoyi / Evidence Lab
           </a>
           <div className="hidden items-center gap-7 text-sm text-[var(--muted)] md:flex">
             {navItems.map(([label, href]) => (

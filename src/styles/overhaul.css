@@ -1073,6 +1073,22 @@
   }
 }
 
+@media (max-width: 1100px) and (min-width: 768px) {
+  .final-hybrid__hero-copy > .system-visual figcaption {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.35rem;
+  }
+
+  .final-hybrid__hero-copy > .system-visual figcaption span {
+    min-width: 0;
+  }
+
+  .final-hybrid__hero-copy > .system-visual figcaption small {
+    text-align: left;
+  }
+}
+
 /* 768 and mobile */
 @media (max-width: 767px) {
   :root {

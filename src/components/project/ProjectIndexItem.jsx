@@ -6,7 +6,7 @@ import { projectTitleEn, projectTitleZh } from "../../utils/presentation.js";
 
 export function ProjectIndexItem({ project, variant = "business", linkable = true, index }) {
   return (
-    <article className={`production-index-item is-${variant}`}>
+    <article className={`production-index-item is-${variant}`} data-project={project.slug}>
       {variant === "featured" ? (
         <figure>
           <ProjectVisual project={project} />
@@ -21,7 +21,7 @@ export function ProjectIndexItem({ project, variant = "business", linkable = tru
           <div><dt>角色</dt><dd>{project.publicRole}</dd></div>
           {project.outcomes[0] ? <div><dt>结果</dt><dd>{project.outcomes[0]}</dd></div> : null}
         </dl>
-        {linkable ? <AppLink to={`/work/${project.slug}`}>阅读完整案例 <Arrow /></AppLink> : null}
+        {linkable ? <AppLink to={`/work/${project.slug}`}>查看完整案例 <Arrow /></AppLink> : null}
       </div>
     </article>
   );

@@ -43,7 +43,7 @@ function FeaturedOpening({ project, activeLens }) {
             <h2>{projectTitleZh(project)}<small>{projectTitleEn(project)}</small></h2>
             <div><span>我的角色</span><strong>{project.publicRole}</strong></div>
           </header>
-          <div className="final-hybrid__story-tabs" role="group" aria-label={`${project.shortTitle} project story`}>
+          <div className="final-hybrid__story-tabs" role="group" aria-label={`${projectTitleZh(project)} 项目叙事`}>
             {story.map((item, index) => (
               <button
                 type="button"
@@ -61,7 +61,7 @@ function FeaturedOpening({ project, activeLens }) {
             <span>{activeStory.text}</span>
             <small>岗位视角：{activeLens.label} — {activeLens.why}</small>
           </div>
-          <AppLink className="final-hybrid__case-link" to={`/work/${project.slug}`}>阅读完整案例 <Arrow /></AppLink>
+          <AppLink className="final-hybrid__case-link" to={`/work/${project.slug}`}>查看完整案例 <Arrow /></AppLink>
         </div>
         <figure className="final-hybrid__featured-evidence">
           <ProjectVisual project={project} eager />
@@ -88,7 +88,7 @@ function SecondaryFeature({ project, recommended }) {
             <div key={item}><dt>{index === 0 ? "结果" : "证据"}</dt><dd>{item}</dd></div>
           ))}
         </dl>
-        <AppLink to={`/work/${project.slug}`}>阅读案例 <Arrow /></AppLink>
+        <AppLink to={`/work/${project.slug}`}>查看案例 <Arrow /></AppLink>
       </div>
     </article>
   );
@@ -103,7 +103,7 @@ export function FeaturedWork({ projects, activeLens, recommendedIds }) {
       <FeaturedOpening project={primary} activeLens={activeLens} />
       {secondary.length ? (
         <section className="final-hybrid__supporting final-hybrid__featured-secondary">
-          <header><p>重点证据 / FEATURED</p><h2>真实工作，<br />可见结果。</h2></header>
+          <header><p>精选项目 / FEATURED</p><h2>真实工作，<br />看得见结果。</h2></header>
           {secondary.map((project) => (
             <SecondaryFeature key={project.id} project={project} recommended={recommendedIds.has(project.id)} />
           ))}

@@ -36,7 +36,13 @@ export function HomePage() {
     <>
       <main id="main-content">
         <section className="final-hybrid__hero">
-          <Hero profile={home.profile} proofs={home.quickProofs} />
+          <Hero
+            profile={home.profile}
+            proofs={home.quickProofs}
+            featuredProject={home.startProjects[0]}
+          />
+        </section>
+        <section className="vo-start-shell" aria-label="精选项目入口">
           <StartHere
             projects={home.startProjects}
             activeProject={activeStart}

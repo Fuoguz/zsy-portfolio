@@ -12,7 +12,7 @@ export function WorkPage() {
     <main className="production-route" id="main-content">
       <header className="production-route__hero production-route__hero--visual">
         <div className="production-route__hero-copy">
-          <p>项目档案 / WORK INDEX</p>
+          <p>项目档案 / 全部项目</p>
           <h1>以真实工作为主，<br /><em>按证据组织阅读。</em></h1>
           <span>真实业务与产品工作优先；更多工作与 Lab 使用更轻的视觉权重。</span>
           <dl className="vo-route-stats">
@@ -23,10 +23,10 @@ export function WorkPage() {
         </div>
         <SystemVisual variant="work" caption="项目索引抽象图 · 非项目证据" />
       </header>
-      <ProjectCollection label="重点案例 / FEATURED" title="建议先从这里开始。" projects={work.featured} variant="featured" caseStudySlugs={caseStudySlugs} />
-      <ProjectCollection label="真实业务 / MORE WORK" title="运营、协作与交付。" projects={work.business} variant="business" caseStudySlugs={caseStudySlugs} />
+      <ProjectCollection label="重点案例 / 精选" title="建议先从这里开始。" projects={work.featured} variant="featured" caseStudySlugs={caseStudySlugs} />
+      <ProjectCollection label="真实业务 / 更多工作" title="运营、协作与交付。" projects={work.business} variant="business" caseStudySlugs={caseStudySlugs} />
       <CapabilityEvidence capabilities={capabilities} />
-      <ProjectCollection label="实验 / LAB" title="创意能力的扩展区。" projects={work.lab} variant="lab" caseStudySlugs={caseStudySlugs} />
+      <ProjectCollection label="实验 / 创意扩展" title="创意能力的扩展区。" projects={work.lab} variant="lab" caseStudySlugs={caseStudySlugs} />
     </main>
   );
 }

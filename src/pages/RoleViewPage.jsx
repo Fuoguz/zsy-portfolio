@@ -16,7 +16,7 @@ export function RoleViewPage({ mode }) {
     <main className="production-route production-role-view" id="main-content">
       <header className="production-route__hero production-route__hero--visual">
         <div className="production-route__hero-copy">
-          <p>{presentation.eyebrow} / ROLE VIEW</p>
+          <p>{presentation.eyebrow} / 岗位视角</p>
           <h1>{presentation.title}</h1>
           <span>{view.description}</span>
           <dl className="vo-route-stats">

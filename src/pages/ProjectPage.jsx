@@ -37,7 +37,7 @@ function ContributionBoundary({ boundary }) {
   if (!groups.length) return null;
   return (
     <section className="production-case__boundary">
-      <header><span>贡献边界 / OWNERSHIP</span><h2>把贡献说清楚。</h2></header>
+      <header><span>贡献边界 / 我的工作范围</span><h2>把贡献说清楚。</h2></header>
       <div>
         {groups.map(([label, items]) => (
           <article key={label}><h3>{label}</h3><p>{items.join("；")}</p></article>
@@ -50,6 +50,7 @@ function ContributionBoundary({ boundary }) {
 export function ProjectPage({ slug }) {
   const project = getPublicProject(slug);
   if (!project) return null;
+  const heroClaims = project.claims.slice(0, 2);
   return (
     <main className="production-route production-case" id="main-content">
       <header className="production-case__hero">
@@ -58,31 +59,27 @@ export function ProjectPage({ slug }) {
             <AppLink to="/work">← 返回项目索引</AppLink>
             <ProjectClassification values={project.classification} />
           </div>
-          <p className="production-case__hero-kicker">CASE STUDY / 公开案例</p>
+          <p className="production-case__hero-kicker">案例研究 / 公开案例</p>
           <h1>{projectTitleZh(project)}<small>{projectTitleEn(project)}</small></h1>
-          <p>{project.summary}</p>
-          <dl>
+          <p className="production-case__hero-summary"><strong>一句话结论</strong>{project.summary}</p>
+          <dl className="production-case__hero-meta">
             <div><dt>角色</dt><dd>{project.publicRole}</dd></div>
             <div><dt>状态</dt><dd>{formatDeliveryStatus(project.deliveryStatus)}</dd></div>
-            {project.evidence[0] ? (
-              <div><dt>证据</dt><dd><a href={`#evidence-${project.evidence[0].id}`}>{project.evidence.length} 条证据 ↓</a></dd></div>
-            ) : null}
+            {heroClaims.map((claim) => <div key={claim.id}><dt>{claim.label}</dt><dd>{claim.value}</dd></div>)}
+            {project.evidence[0] ? <div><dt>公开证据</dt><dd><a href={`#evidence-${project.evidence[0].id}`}>{project.evidence.length} 条 ↓</a></dd></div> : null}
           </dl>
         </div>
-        <SystemVisual variant={project.slug} caption="案例概念封面 · 非项目证据" />
+        <div className="production-case__hero-visual-stack">
+          <SystemVisual variant={project.slug} slot="project-cover" caption="项目抽象封面 · 非项目证据" />
+          {project.evidence[0] ? <div className="production-case__hero-evidence"><EvidenceFigure evidence={project.evidence[0]} zoom index={1} total={project.evidence.length} /></div> : null}
+        </div>
       </header>
 
-      {project.evidence[0] ? (
-        <section className="production-case__lead-evidence">
-          <EvidenceFigure evidence={project.evidence[0]} zoom index={1} total={project.evidence.length} />
-        </section>
-      ) : null}
-
-      <EditorialNote eyebrow="背景 / CONTEXT" title="这项工作处在什么场景里。" text={project.context} />
+      <EditorialNote eyebrow="背景 / 工作场景" title="这项工作处在什么场景里。" text={project.context} />
 
       {project.problem ? (
         <section className="production-case__problem">
-          <span>问题 / PROBLEM</span><h2>{project.problem}</h2>
+          <span>问题 / 要解决什么</span><h2>{project.problem}</h2>
         </section>
       ) : null}
       <NarrativeList title="约束条件" items={project.constraints} />
@@ -103,7 +100,7 @@ export function ProjectPage({ slug }) {
 
       {project.evidence.length > 1 ? (
         <section className="production-case__evidence-section" aria-labelledby="case-evidence-title">
-          <header><span>公开证据 / EVIDENCE</span><h2 id="case-evidence-title">让证据与来源一起被看见。</h2></header>
+          <header><span>公开证据 / 来源</span><h2 id="case-evidence-title">让证据与来源一起被看见。</h2></header>
           <div className="production-case__evidence-grid">
             {project.evidence.slice(1).map((item, itemIndex) => (
               <EvidenceFigure evidence={item} key={item.id} zoom index={itemIndex + 2} total={project.evidence.length} />
@@ -112,7 +109,7 @@ export function ProjectPage({ slug }) {
         </section>
       ) : null}
 
-      <EditorialNote eyebrow="复盘 / REFLECTION" title="这项工作改变了什么。" text={project.reflection} />
+      <EditorialNote eyebrow="复盘 / 反思" title="这项工作改变了什么。" text={project.reflection} />
 
       {project.relatedProjects.length ? (
         <nav className="production-case__related" aria-label="相关项目">

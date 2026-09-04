@@ -1,16 +1,68 @@
-# React + Vite
+# Zhang Shaoyi — Portfolio V2
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A recruiter-facing portfolio for product operations, project operations, AI applications and business digitalization. The site prioritizes real work, contribution boundaries and public-safe evidence over decorative interaction.
 
-Currently, two official plugins are available:
+## Live site
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+[fuoguz.github.io/zsy-portfolio](https://fuoguz.github.io/zsy-portfolio/)
 
-## React Compiler
+The Release Candidate is developed on `portfolio-v2`. Production deployment remains on GitHub Pages until the final release review.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## What is included
 
-## Expanding the ESLint configuration
+- Recruiter-oriented homepage with Role Lens, Quick Proof and selected work
+- Shared data-driven Work index and Case Study shell
+- EagleHub, Onboarding Automation, Team Formation and AI Content Growth cases
+- Public-safe Evidence Viewer with provenance captions
+- Capability → Project → Evidence mapping
+- Privacy-safe public resume
+- GitHub Pages and root-domain build targets
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Tech stack
+
+- React 19
+- Vite
+- Tailwind CSS
+- Framer Motion
+- Lucide React
+- GitHub Pages
+
+## Architecture
+
+Production UI lives under `src/pages`, `src/sections` and `src/components`. Raw content is maintained in `src/data` and filtered through the validation/selectors layer. Before development and builds, `scripts/generate-public-content.js` creates a sanitized public snapshot; Production components never consume raw project arrays.
+
+Historical visual prototypes remain under `src/experiments` as regression references and are not imported into the Production homepage.
+
+## Development
+
+```bash
+npm install
+npm run dev
+```
+
+Quality checks:
+
+```bash
+npm test
+npm run lint
+npm run validate:content
+npm run validate:public-assets
+npm run build
+```
+
+Deployment builds:
+
+```bash
+npm run build:github
+npm run build:root
+```
+
+`build:github` uses `/zsy-portfolio/`; `build:root` targets a future custom-domain root. Both produce a static `404.html` SPA fallback for direct Case Study URL refreshes.
+
+## Design philosophy
+
+The visual system combines editorial typography, product-oriented navigation and evidence-led case storytelling. Reconstructed diagrams, real screenshots and anonymous demo data are explicitly distinguished. Internal notes, credentials, employee data and unredacted assets are blocked from public output.
+
+## Evidence and privacy
+
+See [Evidence Strategy](docs/EVIDENCE_STRATEGY.md), [Redaction Guide](docs/REDACTION_GUIDE.md) and [Missing Inputs](MISSING_INPUTS.md).

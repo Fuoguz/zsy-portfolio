@@ -3,13 +3,23 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-"scripts": {
-  "dev": "vite",
-  "build": "vite build",
-  "preview": "vite preview",
-  "predeploy": "npm run build",
-  "deploy": "gh-pages -d dist"
-},
+  "scripts": {
+    "generate:public": "node scripts/generate-public-content.js",
+    "assets:release": "node scripts/render-release-assets.cjs",
+    "dev": "npm run generate:public && vite",
+    "test": "npm run generate:public && node --test --test-isolation=none tests/content.test.js tests/public-content.test.js tests/paths.test.js tests/router.test.js",
+    "test:coverage": "npm run generate:public && node --test --test-isolation=none --experimental-test-coverage tests/content.test.js tests/public-content.test.js tests/paths.test.js tests/router.test.js",
+    "qa:release": "node scripts/release-candidate-qa.cjs",
+    "validate:content": "node scripts/validate-content.js",
+    "validate:public-assets": "node scripts/validate-public-assets.js",
+    "lint": "eslint .",
+    "build": "npm run validate:content && npm run generate:public && npm run validate:public-assets && vite build && node scripts/create-spa-fallback.cjs dist",
+    "build:github": "npm run validate:content && npm run generate:public && npm run validate:public-assets && vite build --base /zsy-portfolio/ --outDir dist-github && node scripts/create-spa-fallback.cjs dist-github",
+    "build:root": "npm run validate:content && npm run generate:public && npm run validate:public-assets && vite build --base / --outDir dist-root && node scripts/create-spa-fallback.cjs dist-root",
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
+  },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.0",
     "framer-motion": "^12.38.0",

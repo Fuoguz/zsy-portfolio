@@ -1,0 +1,137 @@
+:root {
+  /* Primitive palette — implementation detail. Components consume semantic aliases below. */
+  --palette-paper-0: #fffdf7;
+  --palette-paper-100: #f2efe7;
+  --palette-paper-200: #e8e4d9;
+  --palette-paper-300: #d8d3c7;
+  --palette-navy-900: #172137;
+  --palette-navy-700: #465064;
+  --palette-navy-600: #606a79;
+  --palette-line-300: #c1beb5;
+  --palette-cobalt-600: #2454d6;
+  --palette-cobalt-100: #dfe6f8;
+  --palette-vermilion-600: #c43b22;
+  --palette-vermilion-100: #f2dfd8;
+
+  /* Semantic color system. */
+  --color-bg: var(--palette-paper-100);
+  --color-bg-muted: var(--palette-paper-200);
+  --color-surface: var(--palette-paper-0);
+  --color-surface-highlight: var(--palette-cobalt-100);
+  --color-surface-selected: var(--palette-vermilion-100);
+  --color-evidence-surface: var(--palette-paper-0);
+  --color-text: var(--palette-navy-900);
+  --color-text-secondary: var(--palette-navy-700);
+  --color-text-muted: var(--palette-navy-600);
+  --color-border: var(--palette-line-300);
+  --color-border-strong: var(--palette-navy-900);
+  --color-accent: var(--palette-cobalt-600);
+  --color-accent-secondary: var(--palette-vermilion-600);
+  --color-focus: var(--palette-vermilion-600);
+  --color-selection: var(--palette-cobalt-600);
+  --color-selection-text: var(--palette-paper-0);
+
+  /*
+   * Typography responsibilities:
+   * display = identity, featured project titles, major outcome/metric moments;
+   * editorial = conceptual headings, transitions and narrative emphasis;
+   * ui = navigation, body, controls, metadata, evidence labels and captions.
+   */
+  --font-display: "Bahnschrift Condensed", "Aptos Display", sans-serif;
+  --font-editorial: Georgia, "Songti SC", serif;
+  --font-ui: "Aptos", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-size-label: 0.75rem;
+  --font-size-caption: 0.75rem;
+  --font-size-body-sm: 0.8125rem;
+  --font-size-body: 0.9375rem;
+  --font-size-body-lg: 1.0625rem;
+  --font-size-section: clamp(1.75rem, 3vw, 3.5rem);
+  --font-size-display-sm: clamp(3rem, 5vw, 5.5rem);
+  --font-size-display-lg: clamp(4.5rem, 8.4vw, 8.4rem);
+  --line-height-tight: 0.82;
+  --line-height-heading: 1;
+  --line-height-body: 1.7;
+  --line-height-caption: 1.45;
+  --tracking-display: -0.065em;
+  --tracking-label: 0.09em;
+
+  /* 4px base spacing scale with semantic aliases. */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-18: 4.5rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+  --space-micro: var(--space-1);
+  --space-xs: var(--space-2);
+  --space-sm: var(--space-3);
+  --space-md: var(--space-4);
+  --space-lg: var(--space-6);
+  --space-xl: var(--space-8);
+  --space-2xl: var(--space-12);
+  --space-3xl: var(--space-18);
+
+  /* Layout and grid. Breakpoint values are mirrored in media queries and documented. */
+  --layout-max: 100rem;
+  --page-gutter: clamp(1.25rem, 4vw, 4.25rem);
+  --grid-columns: 12;
+  --grid-gutter: clamp(1rem, 1.75vw, 1.75rem);
+  --section-gap: clamp(4.5rem, 8vw, 8rem);
+  --project-gap: clamp(3.25rem, 7vw, 5.875rem);
+  --image-gap: clamp(1rem, 2.4vw, 1.875rem);
+  --metadata-gap: var(--space-xs);
+  --touch-target-min: 2.75rem;
+
+  /* Borders and surfaces stay square and editorial by default. */
+  --border-hairline: 1px;
+  --border-emphasis: 2px;
+  --radius-none: 0;
+  --radius-subtle: 0.125rem;
+
+  /* Motion communicates feedback and context; it is not ambient decoration. */
+  --motion-fast: 150ms;
+  --motion-normal: 220ms;
+  --motion-slow: 360ms;
+  --ease-standard: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-emphasized: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Focus and layering. */
+  --focus-ring-width: 3px;
+  --focus-ring-offset: 4px;
+  --layer-base: 0;
+  --layer-sticky: 50;
+  --layer-overlay: 100;
+}
+
+@media (max-width: 63.9375rem) {
+  :root {
+    --grid-columns: 8;
+    --section-gap: clamp(4rem, 8vw, 6rem);
+  }
+}
+
+@media (max-width: 47.9375rem) {
+  :root {
+    --page-gutter: 1.25rem;
+    --grid-columns: 4;
+    --grid-gutter: 1rem;
+    --section-gap: 4.5rem;
+    --project-gap: 3.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-fast: 0ms;
+    --motion-normal: 0ms;
+    --motion-slow: 0ms;
+  }
+}

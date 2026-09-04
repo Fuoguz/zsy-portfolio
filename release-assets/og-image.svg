@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f2efe7"/>
+  <rect x="0" y="0" width="28" height="630" fill="#2454d6"/>
+  <rect x="1030" y="62" width="92" height="92" fill="#c43b22"/>
+  <path d="M78 82h1044M78 548h1044" stroke="#172137" stroke-width="2"/>
+  <text x="78" y="138" fill="#2454d6" font-family="Arial, Microsoft YaHei, sans-serif" font-size="24" font-weight="700" letter-spacing="3">PORTFOLIO / 2027 GRADUATE</text>
+  <text x="72" y="335" fill="#172137" font-family="Arial Narrow, Arial, sans-serif" font-size="142" font-weight="800" letter-spacing="-8">ZHANG SHAOYI</text>
+  <text x="78" y="410" fill="#172137" font-family="Georgia, Songti SC, serif" font-size="42">Product Operations · AI Applications · Digital Workflows</text>
+  <text x="78" y="506" fill="#606a79" font-family="Arial, Microsoft YaHei, sans-serif" font-size="26">真实项目 · 职责边界 · 公开证据</text>
+</svg>

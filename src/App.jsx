@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
   ArrowUpRight,
@@ -9,6 +9,43 @@ import {
   Sparkles,
   Workflow,
 } from "lucide-react";
+
+const experimentPages = {
+  a: lazy(() => import("./experiments/a/ProofroomPrototype.jsx")),
+  b: lazy(() => import("./experiments/b/ProofCircuitPrototype.jsx")),
+  c: lazy(() => import("./experiments/c/CutToOutcomePrototype.jsx")),
+  final: lazy(() => import("./experiments/final/FinalHybridPrototype.jsx")),
+};
+
+function getExperimentKey() {
+  if (typeof window === "undefined") return null;
+
+  const configuredBase = import.meta.env.BASE_URL.replace(/\/$/, "");
+  const pathname = configuredBase && window.location.pathname.startsWith(configuredBase)
+    ? window.location.pathname.slice(configuredBase.length)
+    : window.location.pathname;
+  const match = pathname.match(/^\/experiment\/(a|b|c|final)\/?$/);
+
+  return match?.[1] ?? null;
+}
+
+function ExperimentLoading() {
+  return (
+    <main
+      aria-live="polite"
+      style={{
+        minHeight: "100vh",
+        display: "grid",
+        placeItems: "center",
+        color: "#171716",
+        background: "#f3f0e8",
+        fontFamily: "system-ui, sans-serif",
+      }}
+    >
+      Loading homepage prototype…
+    </main>
+  );
+}
 
 const works = [
   {
@@ -1041,6 +1078,7 @@ function HomePage() {
 }
 
 function App() {
+  const experimentKey = getExperimentKey();
   const [hash, setHash] = useState(() =>
     typeof window === "undefined" ? "" : window.location.hash,
   );
@@ -1053,6 +1091,15 @@ function App() {
     window.addEventListener("hashchange", handleHashChange);
     return () => window.removeEventListener("hashchange", handleHashChange);
   }, []);
+
+  if (experimentKey) {
+    const ExperimentPage = experimentPages[experimentKey];
+    return (
+      <Suspense fallback={<ExperimentLoading />}>
+        <ExperimentPage />
+      </Suspense>
+    );
+  }
 
   if (hash === "#/game-ads") {
     return <GameAdsDetail />;

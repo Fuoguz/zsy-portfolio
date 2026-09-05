@@ -4,6 +4,7 @@
 @import "./motion.css";
 @import "./portfolio.css";
 @import "./overhaul.css";
+@import "./signal.css";
 
 :root {
   color: var(--color-text);

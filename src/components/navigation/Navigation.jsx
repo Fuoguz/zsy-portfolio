@@ -59,11 +59,12 @@ export function Navigation() {
     <>
       <a className="final-hybrid__skip" href="#main-content">跳到主要内容</a>
       <header className="final-hybrid__nav">
-        <AppLink className="final-hybrid__brand" to="/" aria-label={`${profile.englishName} home`}>
-          <strong>ZSY</strong><span>Portfolio / 2027</span>
+        <AppLink className="final-hybrid__brand" to="/" aria-label={`${profile.name}的作品集首页`}>
+          <strong>ZSY</strong><span>个人作品集 / 2027</span>
         </AppLink>
         <nav className="final-hybrid__nav-links" aria-label="作品集导航">
           <AppLink to="/work">项目</AppLink>
+          <AppLink to="/about">关于我</AppLink>
           <AppLink to="/#role-lens">岗位视角</AppLink>
           <AppLink to="/#lab">实验</AppLink>
           <a href={resumeHref}>简历</a>

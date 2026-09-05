@@ -8,7 +8,7 @@ export function StartHere({ projects, activeProject, recommendedIds, onSelect })
   return (
     <aside className="final-hybrid__start" aria-label="重点项目导航">
       <div className="final-hybrid__start-heading">
-        <p><span>精选入口 / START HERE</span>从这里开始</p>
+        <p><span>精选入口 / 建议先看</span>从这里开始</p>
         <span>{String(projects.length).padStart(2, "0")} 个重点项目</span>
       </div>
       <figure className="final-hybrid__start-preview" id="start-preview" aria-live="polite">

@@ -28,7 +28,13 @@ const getCurrentRoute = () => resolveRoute(window.location.pathname, {
 });
 
 function LoadingPage() {
-  return <main className="production-page production-loading" aria-live="polite">Loading…</main>;
+  return (
+    <main className="production-page production-loading" aria-live="polite" aria-label="页面加载中">
+      <div className="production-loading__mark"><span>01</span><i /><b /></div>
+      <p>正在整理工作档案</p>
+      <small>加载页面与公开证据</small>
+    </main>
+  );
 }
 
 function ProductionRoute({ route }) {
@@ -59,6 +65,24 @@ export function AppRouter() {
       window.scrollTo({ top: 0, left: 0, behavior: "auto" });
     }
   }, [route]);
+
+  useEffect(() => {
+    const preloadRoutes = () => {
+      if (navigator.connection?.saveData) return;
+      // Opportunistic requests must not turn offline navigation into an unhandled rejection.
+      void Promise.allSettled([
+        import("../pages/WorkPage.jsx"),
+        import("../pages/AboutPage.jsx"),
+        import("../pages/ProjectPage.jsx"),
+      ]);
+    };
+    if ("requestIdleCallback" in window) {
+      const idleId = window.requestIdleCallback(preloadRoutes, { timeout: 1600 });
+      return () => window.cancelIdleCallback(idleId);
+    }
+    const timeoutId = window.setTimeout(preloadRoutes, 800);
+    return () => window.clearTimeout(timeoutId);
+  }, []);
 
   if (route.id === "experiment") {
     const Experiment = experimentPages[route.params.experimentId];

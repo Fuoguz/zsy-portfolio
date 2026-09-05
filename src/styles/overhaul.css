@@ -139,14 +139,15 @@
 
 /* Home: identity, value, proof, visual and project entry share one dense opening. */
 .final-hybrid__hero {
-  grid-template-columns: minmax(0, 1.55fr) minmax(20rem, 0.45fr);
-  min-height: clamp(37rem, 45vw, 45rem);
+  display: block;
+  min-height: 0;
   background: var(--fh-paper);
 }
 
 .final-hybrid__hero-copy {
   display: grid;
-  grid-template-columns: minmax(19rem, 1.05fr) minmax(17rem, 0.78fr);
+  min-height: clamp(38rem, 47vw, 50rem);
+  grid-template-columns: minmax(20rem, 0.9fr) minmax(25rem, 1.1fr);
   grid-template-rows: minmax(0, 1fr) auto;
   gap: clamp(1.25rem, 2vw, 2.5rem);
   align-items: center;
@@ -867,6 +868,207 @@
   padding: clamp(2.8rem, 4vw, 4.6rem) var(--vo-gutter);
 }
 
+/* Core portfolio visual: a single supplied work-map, cropped and annotated for each route. */
+.portfolio-signal-visual {
+  position: relative;
+  min-width: 0;
+  margin: 0;
+  border: 1px solid var(--fh-ink);
+  background: var(--fh-paper-deep);
+  animation: vo-visual-enter 760ms var(--ease-emphasized) 120ms both;
+}
+
+.portfolio-signal-visual__frame {
+  position: relative;
+  min-height: clamp(20rem, 31vw, 36rem);
+  overflow: hidden;
+  background: var(--fh-paper-deep);
+}
+
+.portfolio-signal-visual img {
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  object-fit: cover;
+  object-position: 50% 50%;
+  mix-blend-mode: multiply;
+  transform: scale(1.018);
+  transition: transform 900ms var(--ease-emphasized), filter var(--motion-normal) var(--ease-standard);
+}
+
+.portfolio-signal-visual:hover img {
+  filter: saturate(1.08) contrast(1.02);
+  transform: scale(1.055);
+}
+
+.portfolio-signal-visual__grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(rgb(23 33 55 / 13%) 1px, transparent 1px), linear-gradient(90deg, rgb(23 33 55 / 13%) 1px, transparent 1px);
+  background-size: 4.5rem 4.5rem;
+  mask-image: linear-gradient(90deg, rgb(0 0 0 / 38%), transparent 68%);
+}
+
+.portfolio-signal-visual__stamp,
+.portfolio-signal-visual__annotation {
+  position: absolute;
+  z-index: 1;
+  display: grid;
+  gap: 0.35rem;
+  color: var(--fh-ink);
+  font-size: 0.64rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.portfolio-signal-visual__stamp {
+  top: clamp(0.8rem, 1.5vw, 1.4rem);
+  left: clamp(0.8rem, 1.5vw, 1.4rem);
+  grid-template-columns: auto 1.7rem;
+  align-items: center;
+}
+
+.portfolio-signal-visual__stamp span {
+  color: var(--fh-cobalt);
+  font-family: var(--font-editorial);
+  font-size: 1.45rem;
+  letter-spacing: -0.06em;
+}
+
+.portfolio-signal-visual__stamp i {
+  height: 1px;
+  background: var(--fh-ink);
+}
+
+.portfolio-signal-visual__stamp small {
+  grid-column: 1 / -1;
+  color: var(--fh-muted);
+  font-size: 0.55rem;
+}
+
+.portfolio-signal-visual__annotation {
+  right: clamp(0.8rem, 1.5vw, 1.4rem);
+  bottom: clamp(0.8rem, 1.5vw, 1.4rem);
+  max-width: min(15rem, 58%);
+  padding: 0.6rem 0.7rem;
+  border-left: 3px solid var(--fh-vermilion);
+  background: rgb(255 253 247 / 88%);
+  backdrop-filter: blur(8px);
+}
+
+.portfolio-signal-visual__annotation span { color: var(--fh-cobalt); }
+.portfolio-signal-visual__annotation strong { font-size: 0.72rem; letter-spacing: 0.025em; }
+
+.portfolio-signal-visual figcaption {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 0.85rem;
+  border-top: 1px solid var(--fh-ink);
+  font-size: var(--font-size-caption);
+}
+
+.portfolio-signal-visual figcaption span { font-weight: 900; }
+.portfolio-signal-visual figcaption small { color: var(--fh-muted); text-align: right; }
+
+.vo-home-hero__visual-column {
+  display: grid;
+  grid-template-rows: auto minmax(20rem, 1fr) auto;
+  min-width: 0;
+  gap: 0.7rem;
+  align-self: stretch;
+}
+
+.vo-home-hero__visual-label {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: baseline;
+  gap: 0.2rem 0.65rem;
+  min-width: 0;
+}
+
+.vo-home-hero__visual-label span {
+  grid-row: span 2;
+  color: var(--fh-vermilion);
+  font-family: var(--font-editorial);
+  font-size: 2rem;
+  line-height: 0.85;
+}
+
+.vo-home-hero__visual-label strong { font-size: 0.86rem; }
+.vo-home-hero__visual-label small,
+.vo-home-hero__visual-note { color: var(--fh-muted); font-size: 0.65rem; letter-spacing: 0.06em; }
+.vo-home-hero__visual-note { margin: 0; line-height: 1.45; letter-spacing: 0; }
+
+.vo-home-hero__project {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.25rem 1rem;
+  margin-top: clamp(1.2rem, 2.3vw, 2.2rem);
+  padding: 0.9rem 0 0;
+  border-top: 1px solid var(--fh-ink);
+  transition: color var(--motion-fast) var(--ease-standard), padding var(--motion-fast) var(--ease-emphasized);
+}
+
+.vo-home-hero__project:hover,
+.vo-home-hero__project:focus-visible { padding-left: 0.35rem; color: var(--fh-cobalt); }
+.vo-home-hero__project > span:not(.vo-home-hero__project-kicker) { grid-column: 1; color: var(--fh-muted); font-size: 0.73rem; line-height: 1.4; }
+.vo-home-hero__project-kicker { color: var(--fh-vermilion); font-size: 0.62rem; font-weight: 900; letter-spacing: 0.1em; }
+.vo-home-hero__project strong { grid-column: 1; font-family: var(--font-editorial); font-size: clamp(1.2rem, 1.7vw, 1.7rem); line-height: 1.05; }
+.vo-home-hero__project svg { grid-column: 2; grid-row: 1 / -1; align-self: center; }
+
+.vo-home-hero__visual-column .portfolio-signal-visual__frame {
+  min-height: 0;
+  height: clamp(24rem, 31vw, 35rem);
+}
+.vo-home-hero__visual-column .portfolio-signal-visual {
+  display: block;
+  min-height: 0;
+  height: auto;
+}
+.vo-home-hero__visual-column .portfolio-signal-visual img { position: static; min-height: 0; }
+
+.production-route__hero--visual > .portfolio-signal-visual {
+  max-height: 32rem;
+}
+
+.production-route__hero--visual > .portfolio-signal-visual[data-variant="work"] img { object-position: 59% 50%; }
+.production-route__hero--visual > .portfolio-signal-visual[data-variant="about"] img { object-position: 33% 50%; }
+
+.production-loading {
+  display: grid;
+  min-height: min(62vh, 40rem);
+  place-content: center;
+  gap: 0.6rem;
+  text-align: center;
+}
+
+.production-loading p {
+  margin: 0.7rem 0 0;
+  font-family: var(--font-editorial);
+  font-size: clamp(1.8rem, 3vw, 3rem);
+}
+
+.production-loading small { color: var(--fh-muted); }
+
+.production-loading__mark {
+  display: grid;
+  grid-template-columns: auto 6rem auto;
+  align-items: center;
+  gap: 0.7rem;
+  color: var(--fh-cobalt);
+  font-family: var(--font-editorial);
+  font-size: 2.1rem;
+}
+
+.production-loading__mark i,
+.production-loading__mark b { display: block; height: 2px; }
+.production-loading__mark i { background: var(--fh-ink); animation: vo-loading-line 900ms var(--ease-emphasized) infinite alternate; }
+.production-loading__mark b { width: 0.55rem; height: 0.55rem; background: var(--fh-vermilion); transform: rotate(45deg); }
+
 /* Entry and scroll-linked motion: directional masks, not generic fade-up. */
 .vo-hero__identity > *,
 .production-route__hero-copy > * {
@@ -925,14 +1127,19 @@
   to { opacity: 1; }
 }
 
+@keyframes vo-loading-line {
+  from { transform: scaleX(0.2); transform-origin: left; }
+  to { transform: scaleX(1); transform-origin: right; }
+}
+
 /* 1280 → 1024: remove the narrow nested-grid failure zone. */
 @media (max-width: 1200px) {
   .final-hybrid__hero {
-    grid-template-columns: minmax(0, 1.45fr) minmax(19rem, 0.55fr);
+    min-height: 0;
   }
 
   .final-hybrid__hero-copy {
-    grid-template-columns: minmax(17rem, 1fr) minmax(15rem, 0.72fr);
+    grid-template-columns: minmax(17rem, 0.95fr) minmax(16rem, 1.05fr);
   }
 
   .final-hybrid__actions .vo-hero__minor-action:last-child {
@@ -973,7 +1180,6 @@
 /* 1024 / tablet */
 @media (max-width: 1023px) {
   .final-hybrid__hero {
-    grid-template-columns: 1fr;
     min-height: auto;
   }
 
@@ -1456,12 +1662,67 @@
   }
 }
 
+/* Route-specific image crops and compact mobile hierarchy. */
+@media (max-width: 767px) {
+  .vo-home-hero__visual-column { gap: 0.55rem; }
+
+  .vo-home-hero__visual-column .portfolio-signal-visual__frame {
+    height: clamp(13.5rem, 58vw, 17rem);
+    min-height: 0;
+  }
+
+  .vo-home-hero__visual-column .portfolio-signal-visual img { object-position: 50% 50%; }
+  .portfolio-signal-visual__grid { background-size: 3rem 3rem; }
+  .portfolio-signal-visual__annotation { max-width: 66%; }
+  .portfolio-signal-visual__annotation strong { font-size: 0.64rem; }
+
+  .vo-hero__proofs {
+    grid-row: auto;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .vo-hero__proofs article,
+  .vo-hero__proofs article:not(:first-child) { min-width: 0; padding: 0.65rem 0.4rem 0.5rem; }
+  .vo-hero__proofs strong,
+  .vo-hero__proofs span { overflow-wrap: anywhere; white-space: normal; }
+
+  .production-route__hero--visual > .portfolio-signal-visual {
+    max-height: none;
+  }
+
+  .production-route__hero--visual > .portfolio-signal-visual .portfolio-signal-visual__frame {
+    min-height: clamp(15rem, 62vw, 20rem);
+  }
+
+  .production-route__hero--visual > .portfolio-signal-visual[data-variant="work"] img { object-position: 58% 50%; }
+  .production-route__hero--visual > .portfolio-signal-visual[data-variant="about"] img { object-position: 33% 50%; }
+}
+
+@media (max-width: 480px) {
+  .vo-hero__proofs { grid-template-columns: 1fr; }
+  .vo-hero__proofs article,
+  .vo-hero__proofs article:not(:first-child) {
+    grid-template-columns: minmax(5rem, auto) 1fr;
+    align-items: baseline;
+    gap: 0.2rem 0.65rem;
+    padding: 0.65rem 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--fh-line);
+  }
+  .vo-hero__proofs article:last-child { border-bottom: 0; }
+  .vo-hero__proofs strong { grid-row: span 2; font-size: 1.65rem; }
+  .vo-hero__proofs span { font-size: 0.72rem; }
+  .vo-hero__proofs small { display: block; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .system-visual__path,
   .system-visual__core,
   .vo-hero__identity > *,
   .production-route__hero-copy > *,
   .system-visual,
+  .portfolio-signal-visual,
+  .production-loading__mark i,
   .evidence-viewer[open],
   .evidence-viewer::backdrop,
   .production-case .evidence-figure > .responsive-image,

@@ -16,3 +16,7 @@ export function projectTitleZh(project) {
 export function projectTitleEn(project) {
   return project.englishTitle || project.shortTitle || project.title;
 }
+
+export function roleLabelZh(lens) {
+  return ({ all: "全部", aiProduct: "AI 产品", productOps: "产品运营", projectOps: "项目运营", growth: "增长", aiNative: "AI 原生" })[lens.id] || lens.label;
+}

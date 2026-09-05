@@ -1,48 +1,48 @@
 const VARIANTS = Object.freeze({
   home: {
-    kicker: "WORK / SIGNAL / OUTCOME",
+    kicker: "工作 / 信号 / 结果",
     title: "把模糊问题组织成可验证的工作系统",
     nodes: ["业务问题", "规则结构", "协作节点", "公开证据"],
   },
   work: {
-    kicker: "PROJECT ATLAS / 07",
+    kicker: "项目索引 / 07",
     title: "项目、决策与证据的公开索引",
     nodes: ["真实业务", "产品框架", "运营流程", "创意实验"],
   },
   about: {
-    kicker: "WORKING METHOD",
+    kicker: "工作方法",
     title: "观察、拆解、验证、交付",
     nodes: ["流程", "角色", "约束", "结果"],
   },
   role: {
-    kicker: "ROLE LENS",
+    kicker: "岗位视角",
     title: "同一组事实，不同的阅读入口",
     nodes: ["AI 产品", "产品运营", "项目运营", "增长"],
   },
   eaglehub: {
-    kicker: "RELATION / PERMISSION / LOOP",
+    kicker: "关系 / 权限 / 闭环",
     title: "多角色人才培养系统",
     nodes: ["学员", "导师", "运营", "培养闭环"],
   },
   "onboarding-automation": {
-    kicker: "BRANCH / ROUTE / REVIEW",
+    kicker: "分支 / 路由 / 复核",
     title: "可检查的入职规则链路",
     nodes: ["规则输入", "人员路由", "人工复核", "安全输出"],
   },
   "ai-content-growth-workflow": {
-    kicker: "EDIT / PUBLISH / LEARN",
+    kicker: "编辑 / 发布 / 复盘",
     title: "AI 辅助与人工判断的内容循环",
     nodes: ["选题", "资料", "编辑判断", "发布复盘"],
   },
   "team-formation-platform": {
-    kicker: "PEOPLE / GROUP / CONSTRAINT",
+    kicker: "人员 / 分组 / 约束",
     title: "规模化组队与规则校验",
     nodes: ["成员", "队伍", "约束", "异常处理"],
   },
 });
 
 const FALLBACK = {
-  kicker: "SYSTEM / PRACTICE",
+  kicker: "系统 / 实践",
   title: "从创意假设到公开作品",
   nodes: ["输入", "结构", "表达", "输出"],
 };
@@ -93,7 +93,7 @@ function BranchingGrammar({ content }) {
       <circle className="system-visual__core" cx="240" cy="260" r="14" />
       <text className="system-visual__branch-label" x="62" y="238">01</text>
       <text className="system-visual__branch-label" x="62" y="278">{content.nodes[0]}</text>
-      <text className="system-visual__branch-label" x="362" y="102">IF / THEN</text>
+      <text className="system-visual__branch-label" x="362" y="102">条件分支</text>
       <text className="system-visual__branch-label" x="512" y="105">02 · {content.nodes[1]}</text>
       <text className="system-visual__branch-label" x="512" y="253">03 · {content.nodes[2]}</text>
       <text className="system-visual__branch-label" x="512" y="401">04 · {content.nodes[3]}</text>
@@ -172,9 +172,8 @@ export function SystemVisual({ variant = "home", slot = "project-cover", caption
         <rect className="system-visual__frame" x="1" y="1" width="718" height="518" />
         {renderGrammar(variant, content)}
         <text className="system-visual__kicker" x="34" y="38">{content.kicker}</text>
-        <text className="system-visual__axis" x="686" y="38" textAnchor="end">ABSTRACT / NOT EVIDENCE</text>
       </svg>
-      <figcaption><span>{caption}</span><small>PROCEDURAL VECTOR / NOT EVIDENCE</small></figcaption>
+      <figcaption><span>{caption}</span></figcaption>
     </figure>
   );
 }

@@ -1,6 +1,6 @@
 import { AppLink } from "../components/navigation/AppLink.jsx";
 import { Arrow } from "../components/ui/Arrow.jsx";
-import { SystemVisual } from "../components/visual/SystemVisual.jsx";
+import { PortfolioSignalVisual } from "../components/visual/PortfolioSignalVisual.jsx";
 import { publicResumeHref } from "../utils/paths.js";
 import { projectTitleZh } from "../utils/presentation.js";
 
@@ -12,7 +12,7 @@ export function Hero({ profile, proofs, featuredProject }) {
         <p className="final-hybrid__eyebrow">
           {profile.graduation.zh} · {profile.school} · {profile.major}
         </p>
-        <p className="vo-home-hero__label">个人工作档案 / PRODUCT OPS × AI</p>
+        <p className="vo-home-hero__label">个人工作档案 / 产品运营 × AI</p>
         <h1 id="home-title"><span>{profile.name}</span><small>{profile.englishName}</small></h1>
         <p className="final-hybrid__positioning">{profile.positioning}</p>
         <p className="final-hybrid__focus-line">
@@ -29,14 +29,13 @@ export function Hero({ profile, proofs, featuredProject }) {
             <span className="vo-home-hero__project-kicker">当前重点项目 / 01</span>
             <strong>{projectTitleZh(featuredProject)}</strong>
             <span>{featuredProject.summary}</span>
-            <Arrow />
+            <span className="vo-home-hero__project-arrow" aria-hidden="true">↗</span>
           </AppLink>
         ) : null}
       </div>
       <div className="vo-home-hero__visual-column">
-        <div className="vo-home-hero__visual-label"><span>01</span><strong>把问题变成下一步</strong><small>PROCESS / SIGNAL / OUTCOME</small></div>
-        <SystemVisual variant="home" slot="home-hero" caption="主视觉 · 抽象工作方法，不是项目证据" />
-        <p className="vo-home-hero__visual-note">从业务问题、协作关系到可验证输出，视觉化呈现我的工作路径。</p>
+        <div className="vo-home-hero__visual-label"><span>01</span><strong>把问题变成下一步</strong><small>问题 / 判断 / 输出</small></div>
+        <PortfolioSignalVisual variant="home" priority />
       </div>
       <div className="vo-hero__proofs" aria-label="关键工作证明">
         {proofs.map((proof, index) => (

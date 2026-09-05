@@ -4,7 +4,7 @@ import { AppLink } from "../components/navigation/AppLink.jsx";
 import { ProjectClassification } from "../components/project/ProjectClassification.jsx";
 import { ProjectVisual } from "../components/project/ProjectVisual.jsx";
 import { Arrow } from "../components/ui/Arrow.jsx";
-import { projectTitleEn, projectTitleZh } from "../utils/presentation.js";
+import { projectTitleEn, projectTitleZh, roleLabelZh } from "../utils/presentation.js";
 
 const buildStory = (project) => [
   project.problem ? {
@@ -59,7 +59,7 @@ function FeaturedOpening({ project, activeLens }) {
             <p>{activeStory.label}</p>
             <h3>{activeStory.title}</h3>
             <span>{activeStory.text}</span>
-            <small>岗位视角：{activeLens.label} — {activeLens.why}</small>
+            <small>岗位视角：{roleLabelZh(activeLens)} — {activeLens.why}</small>
           </div>
           <AppLink className="final-hybrid__case-link" to={`/work/${project.slug}`}>查看完整案例 <Arrow /></AppLink>
         </div>
@@ -77,7 +77,7 @@ function SecondaryFeature({ project, recommended }) {
     <article className={`final-hybrid__project final-hybrid__project--reverse${recommended ? " is-recommended" : ""}`}>
       <figure>
         <ProjectVisual project={project} />
-        <figcaption>{project.evidence[0]?.caption || "Public case summary"}</figcaption>
+        <figcaption>{project.evidence[0]?.caption || "公开案例摘要"}</figcaption>
       </figure>
       <div className="final-hybrid__project-copy">
         <p>重点项目 / <ProjectClassification values={project.classification} /></p>
@@ -103,7 +103,7 @@ export function FeaturedWork({ projects, activeLens, recommendedIds }) {
       <FeaturedOpening project={primary} activeLens={activeLens} />
       {secondary.length ? (
         <section className="final-hybrid__supporting final-hybrid__featured-secondary">
-          <header><p>精选项目 / FEATURED</p><h2>真实工作，<br />看得见结果。</h2></header>
+          <header><p>精选项目 / 值得先看</p><h2>真实工作，<br />看得见结果。</h2></header>
           {secondary.map((project) => (
             <SecondaryFeature key={project.id} project={project} recommended={recommendedIds.has(project.id)} />
           ))}

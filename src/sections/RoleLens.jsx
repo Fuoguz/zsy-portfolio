@@ -13,7 +13,7 @@ export function RoleLens({ lenses, activeLens, onSelect, recommendedProjects }) 
   return (
     <section className="final-hybrid__role-lens" id="role-lens" aria-labelledby="role-lens-title">
       <div className="final-hybrid__lens-title">
-        <span>岗位路径 / ROLE LENS</span>
+        <span>岗位路径 / 阅读方式</span>
         <h2 id="role-lens-title">按岗位阅读</h2>
         <p>同一组真实项目，按你关心的工作方式重新排序。</p>
       </div>

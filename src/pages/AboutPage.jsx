@@ -1,5 +1,5 @@
 import { getAboutPageContent } from "../content/public.js";
-import { SystemVisual } from "../components/visual/SystemVisual.jsx";
+import { PortfolioSignalVisual } from "../components/visual/PortfolioSignalVisual.jsx";
 import { publicResumeHref } from "../utils/paths.js";
 
 const { profile, experience } = getAboutPageContent();
@@ -13,13 +13,14 @@ export function AboutPage() {
           <p>关于我 / {profile.name}</p>
           <h1>从业务问题出发，<br /><em>把协作组织成系统。</em></h1>
           <span>{profile.positioning}</span>
+          <p className="portfolio-about-intro">先理解流程、角色和约束，再决定形成运营方案、产品原型，还是 AI 辅助工具。我的工作横跨内容、项目运营与产品实践。</p>
           <dl className="vo-route-stats">
             <div><dt>方向</dt><dd>产品 × 运营</dd></div>
             <div><dt>方法</dt><dd>证据优先</dd></div>
             <div><dt>状态</dt><dd>{profile.graduation.zh}</dd></div>
           </dl>
         </div>
-        <SystemVisual variant="about" caption="工作方法抽象图 · 非项目证据" />
+        <PortfolioSignalVisual variant="about" priority />
       </header>
       <section className="production-about-page__method">
         <span>工作方法 / 方法</span>

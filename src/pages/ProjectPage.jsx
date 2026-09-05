@@ -52,7 +52,7 @@ export function ProjectPage({ slug }) {
   if (!project) return null;
   const heroClaims = project.claims.slice(0, 2);
   return (
-    <main className="production-route production-case" id="main-content">
+    <main className="production-route production-case" id="main-content" data-project={project.slug}>
       <header className="production-case__hero">
         <div className="production-case__hero-copy">
           <div className="production-case__hero-topline">
@@ -70,8 +70,8 @@ export function ProjectPage({ slug }) {
           </dl>
         </div>
         <div className="production-case__hero-visual-stack">
-          <SystemVisual variant={project.slug} slot="project-cover" caption="项目抽象封面 · 非项目证据" />
           {project.evidence[0] ? <div className="production-case__hero-evidence"><EvidenceFigure evidence={project.evidence[0]} zoom index={1} total={project.evidence.length} /></div> : null}
+          <SystemVisual variant={project.slug} slot="project-cover" caption="工作结构示意 · 非项目证据" />
         </div>
       </header>
 
@@ -115,7 +115,7 @@ export function ProjectPage({ slug }) {
         <nav className="production-case__related" aria-label="相关项目">
           <span>相关项目</span>
           {project.relatedProjects.map((related) => (
-            <AppLink to={`/work/${related.slug}`} key={related.id}>{related.shortTitle} <Arrow /></AppLink>
+            <AppLink to={`/work/${related.slug}`} key={related.id}>{projectTitleZh(related)} <Arrow /></AppLink>
           ))}
         </nav>
       ) : null}

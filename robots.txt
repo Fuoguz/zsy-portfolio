@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://fuoguz.github.io/zsy-portfolio/sitemap.xml

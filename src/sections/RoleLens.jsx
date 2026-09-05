@@ -33,7 +33,6 @@ export function RoleLens({ lenses, activeLens, onSelect, recommendedProjects }) 
         <strong>{lensLabels[activeLens.id] || activeLens.label}</strong>
         {activeLens.why}
         <span>建议先看：{recommendedProjects.map((project) => projectTitleZh(project)).slice(0, 4).join(" · ")}</span>
-        <small>事实保持不变；这里只改变阅读顺序和相关性提示。</small>
       </p>
     </section>
   );

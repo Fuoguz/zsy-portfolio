@@ -22,21 +22,18 @@ export function StartHere({ projects, activeProject, recommendedIds, onSelect })
         {projects.map((project, index) => {
           const recommended = recommendedIds.has(project.id);
           return (
-            <button
-              type="button"
+            <AppLink
+              to={`/work/${project.slug}`}
               className={recommended ? "is-recommended" : ""}
               key={project.id}
-              aria-controls="start-preview"
-              aria-pressed={activeProject.id === project.id}
-              onClick={() => onSelect(project)}
               onFocus={() => onSelect(project)}
               onMouseEnter={() => onSelect(project)}
             >
               <span>{String(index + 1).padStart(2, "0")}</span>
               <strong>{projectTitleZh(project)}</strong>
               <small>{formatProjectClassification(project.classification)}</small>
-              <i>{recommended ? "推荐查看" : "浏览项目"}</i>
-            </button>
+              <i>查看案例 ↗</i>
+            </AppLink>
           );
         })}
       </div>

@@ -37,7 +37,7 @@ function ContributionBoundary({ boundary }) {
   if (!groups.length) return null;
   return (
     <section className="production-case__boundary">
-      <header><span>贡献边界 / 我的工作范围</span><h2>把贡献说清楚。</h2></header>
+      <header><span>贡献边界</span><h2>我的工作范围</h2></header>
       <div>
         {groups.map(([label, items]) => (
           <article key={label}><h3>{label}</h3><p>{items.join("；")}</p></article>
@@ -53,6 +53,7 @@ export function ProjectPage({ slug }) {
   const heroClaims = project.claims.slice(0, 2);
   return (
     <main className="production-route production-case" id="main-content" data-project={project.slug}>
+      <div className="production-case__opening">
       <header className="production-case__hero">
         <div className="production-case__hero-copy">
           <div className="production-case__hero-topline">
@@ -65,7 +66,7 @@ export function ProjectPage({ slug }) {
           <dl className="production-case__hero-meta">
             <div><dt>角色</dt><dd>{project.publicRole}</dd></div>
             <div><dt>状态</dt><dd>{formatDeliveryStatus(project.deliveryStatus)}</dd></div>
-            {heroClaims.map((claim) => <div key={claim.id}><dt>{claim.label}</dt><dd>{claim.value}</dd></div>)}
+            {heroClaims.map((claim) => <div key={claim.id}><dt>{claim.label}</dt><dd>{claim.value}<small className="production-case__claim-scope">{claim.publicCaption}</small></dd></div>)}
             {project.evidence[0] ? <div><dt>公开证据</dt><dd><a href={`#evidence-${project.evidence[0].id}`}>{project.evidence.length} 条 ↓</a></dd></div> : null}
           </dl>
         </div>
@@ -75,7 +76,8 @@ export function ProjectPage({ slug }) {
         </div>
       </header>
 
-      <EditorialNote eyebrow="背景 / 工作场景" title="这项工作处在什么场景里。" text={project.context} />
+      <EditorialNote eyebrow="项目背景" title="工作场景" text={project.context} />
+      </div>
 
       {project.problem ? (
         <section className="production-case__problem">
@@ -89,7 +91,7 @@ export function ProjectPage({ slug }) {
 
       {project.claims.length ? (
         <section className="production-case__claims">
-          <header><span>证据支持的结果</span><h2>只表达当前证据能够支持的结论。</h2></header>
+          <header><span>结果与口径</span><h2>关键结果</h2></header>
           <div>{project.claims.map((claim) => (
             <article key={claim.id}>
               <strong>{claim.value}</strong><span>{claim.label}</span><small>{claim.publicCaption}</small>
@@ -100,7 +102,7 @@ export function ProjectPage({ slug }) {
 
       {project.evidence.length > 1 ? (
         <section className="production-case__evidence-section" aria-labelledby="case-evidence-title">
-          <header><span>公开证据 / 来源</span><h2 id="case-evidence-title">让证据与来源一起被看见。</h2></header>
+          <header><span>公开证据 / 来源</span><h2 id="case-evidence-title">项目材料</h2></header>
           <div className="production-case__evidence-grid">
             {project.evidence.slice(1).map((item, itemIndex) => (
               <EvidenceFigure evidence={item} key={item.id} zoom index={itemIndex + 2} total={project.evidence.length} />
@@ -109,7 +111,7 @@ export function ProjectPage({ slug }) {
         </section>
       ) : null}
 
-      <EditorialNote eyebrow="复盘 / 反思" title="这项工作改变了什么。" text={project.reflection} />
+      <EditorialNote eyebrow="复盘 / 反思" title="经验与判断" text={project.reflection} />
 
       {project.relatedProjects.length ? (
         <nav className="production-case__related" aria-label="相关项目">

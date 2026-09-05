@@ -289,7 +289,7 @@
   max-height: 15rem;
 }
 
-.final-hybrid__start-list > button {
+.final-hybrid__start-list > a {
   min-height: 3.6rem;
   grid-template-columns: 1.7rem minmax(0, 1fr) auto;
   padding: 0.55rem 0;
@@ -1396,7 +1396,7 @@
     display: none;
   }
 
-  .final-hybrid__start-list > button {
+  .final-hybrid__start-list > a {
     min-height: 3.25rem;
   }
 
@@ -1653,7 +1653,7 @@
     display: none;
   }
 
-  .final-hybrid__start-list > button {
+  .final-hybrid__start-list > a {
     grid-template-columns: 1.7rem minmax(0, 1fr);
   }
 

@@ -20,7 +20,7 @@ const caseStudySlugs = new Set(getPublicProjectSlugs());
 
 export function HomePage() {
   const [activeLens, setActiveLens] = useState(
-    home.roleLenses.find((lens) => lens.id === "aiProduct") ?? home.roleLenses[0],
+    home.roleLenses.find((lens) => lens.id === "productOps") ?? home.roleLenses[0],
   );
   const [activeStart, setActiveStart] = useState(home.startProjects[0]);
   const recommendedProjects = useMemo(

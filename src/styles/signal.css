@@ -166,6 +166,36 @@
   .production-case__hero h1 { font-size: 2.6rem; }
   .production-route__hero--visual { grid-template-columns: 1fr 0.85fr; gap: 1.5rem; }
 }
+
+/* Desktop case studies: let the next narrative block occupy the left column while evidence stays tall on the right. */
+@media (min-width: 1024px) {
+  .production-case { display: flow-root; }
+  .production-case__hero { display: contents; }
+  .production-case__hero-copy {
+    float: left;
+    width: calc(50% - 2rem);
+    padding: clamp(1.5rem, 3vw, 3rem) 0 var(--vo-section) var(--vo-gutter);
+    background: var(--fh-paper);
+  }
+  .production-case__hero-visual-stack {
+    float: right;
+    width: calc(50% - 2rem);
+    padding: clamp(1.5rem, 3vw, 3rem) var(--vo-gutter) 0 0;
+    background: var(--fh-paper);
+  }
+  .production-case[data-project="onboarding-automation"] .production-case__hero-copy,
+  .production-case[data-project="onboarding-automation"] .production-case__hero-visual-stack { background: #f2ece1; }
+  .production-case[data-project="ai-content-growth-workflow"] .production-case__hero-copy,
+  .production-case[data-project="ai-content-growth-workflow"] .production-case__hero-visual-stack { background: #edf0f4; }
+  .production-case > header + .production-case__note {
+    clear: none;
+    width: calc(50% - 2rem);
+    padding-right: 0;
+    padding-left: var(--vo-gutter);
+  }
+  .production-case > header + .production-case__note ~ * { clear: both; }
+}
+
 @media (max-width: 767px) {
   .production-portfolio .final-hybrid__hero-copy { grid-template-columns: minmax(0, 1fr); gap: 1.15rem; padding-top: 1.5rem; }
   .final-hybrid__hero h1 { font-size: 3.8rem; line-height: 1; }

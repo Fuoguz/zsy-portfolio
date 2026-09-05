@@ -72,6 +72,16 @@ export function EvidenceViewer({ evidence, index, total }) {
         aria-describedby={descriptionId}
         onClose={handleClose}
         onClick={handleBackdrop}
+        onKeyDown={(event) => {
+          if (event.key !== "Tab") return;
+          const controls = [...event.currentTarget.querySelectorAll("button:not([disabled]), a[href], [tabindex='0']")];
+          const first = controls[0];
+          const last = controls.at(-1);
+          if ((event.shiftKey && document.activeElement === first) || (!event.shiftKey && document.activeElement === last)) {
+            event.preventDefault();
+            (event.shiftKey ? last : first)?.focus();
+          }
+        }}
       >
         <div className="evidence-viewer__panel">
           <header>

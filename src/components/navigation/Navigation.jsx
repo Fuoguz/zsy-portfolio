@@ -57,7 +57,11 @@ export function Navigation() {
 
   return (
     <>
-      <a className="final-hybrid__skip" href="#main-content">跳到主要内容</a>
+      <a className="final-hybrid__skip" href="#main-content" onClick={() => {
+        const main = document.getElementById("main-content");
+        main?.setAttribute("tabindex", "-1");
+        main?.focus();
+      }}>跳到主要内容</a>
       <header className="final-hybrid__nav">
         <AppLink className="final-hybrid__brand" to="/" aria-label={`${profile.name}的作品集首页`}>
           <strong>ZSY</strong><span>个人作品集 / 2027</span>

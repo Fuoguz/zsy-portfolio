@@ -57,7 +57,7 @@ npm run build:github
 npm run build:root
 ```
 
-`build:github` uses `/zsy-portfolio/`; `build:root` targets a future custom-domain root. Both produce a static `404.html` SPA fallback for direct Case Study URL refreshes.
+`build:github` uses `/zsy-portfolio/`; `build:root` targets a future custom-domain root. Both emit public route entry documents with page-specific share metadata, plus a `404.html` SPA fallback for unknown paths. Publish the built `dist` directory to the existing `gh-pages` branch using `npm run deploy -- --nojekyll`; never include local artifacts or unrelated workspace files.
 
 ## Design philosophy
 

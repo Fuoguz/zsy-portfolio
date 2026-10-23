@@ -1,3 +1,5 @@
+> 2026-09-10 更新：Globridge 已获用户确认并提升为 PUBLIC / READY / SHIPPED 的真实全栈 Case，含公开截图、录屏和 Live Link。下文早期版本中关于 Globridge potential / hidden / excluded 的记录已被 CONTENT_SOURCE_OF_TRUTH.md §6.5 取代。Digest 的公开规则不变。
+
 # ZSY Portfolio V2 — Content Inventory
 
 > 版本：G5A Evidence Refresh  

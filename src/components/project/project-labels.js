@@ -11,7 +11,7 @@ const publicLabels = {
 
 const deliveryLabels = {
   ACTIVE: "进行中",
-  SHIPPED: "已交付 / 使用中",
+  SHIPPED: "已交付",
   VALIDATED_PROTOTYPE: "已验证原型 / Dry-run",
   PROTOTYPE: "原型",
   EXPERIMENT: "实验",

@@ -1,10 +1,12 @@
-import { lazy, Suspense, useEffect, useState } from "react";
+import { Component, lazy, Suspense, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { motion, MotionConfig } from "framer-motion";
 
 import { Navigation } from "../components/navigation/Navigation.jsx";
-import { getPublicProject, getPublicProjectSlugs } from "../content/public.js";
+import { getHomePageContent, getPublicProject, getPublicProjectSlugs } from "../content/public.js";
 import { HomePage } from "../pages/HomePage.jsx";
+import { SiteFooter } from "../sections/SiteFooter.jsx";
 import { applyRouteMetadata } from "../utils/metadata.js";
-import { BASE_PATH } from "../utils/paths.js";
+import { BASE_PATH, withBasePath } from "../utils/paths.js";
 import { resolveRoute } from "./route-config.js";
 
 const experimentPages = {
@@ -29,41 +31,73 @@ const getCurrentRoute = () => resolveRoute(window.location.pathname, {
 
 function LoadingPage() {
   return (
-    <main className="production-page production-loading" aria-live="polite" aria-label="页面加载中">
-      <div className="production-loading__mark"><span>01</span><i /><b /></div>
-      <p>正在整理工作档案</p>
-      <small>加载页面与公开证据</small>
+    <main id="main-content" className="page page--loading" aria-live="polite" aria-label="页面加载中">
+      <div className="loading-line" aria-hidden="true"><i /></div>
+      <p>正在载入…</p>
     </main>
   );
+}
+
+class PageErrorBoundary extends Component {
+  state = { failed: false };
+  static getDerivedStateFromError() { return { failed: true }; }
+  render() {
+    if (!this.state.failed) return this.props.children;
+    return (
+      <main id="main-content" className="page page--status wrap" role="alert">
+        <p className="eyebrow">ERROR / 页面未能加载</p>
+        <h1 className="status-title">请再试一次。</h1>
+        <p className="status-lede">网络连接或页面资源可能尚未就绪。</p>
+        <div className="status-actions"><button type="button" className="btn btn--ink" onClick={() => window.location.reload()}>重新加载</button><a className="btn btn--line" href={withBasePath("/")}>返回首页</a></div>
+      </main>
+    );
+  }
+}
+
+// Runs only after the lazy page commits, so cross-route anchors exist before scrolling.
+function RouteReady({ route, previousPathRef }) {
+  useLayoutEffect(() => {
+    const pathname = window.location.pathname;
+    const target = document.getElementById(window.location.hash.slice(1));
+    const main = document.getElementById("main-content");
+    if (pathname !== previousPathRef.current || target) {
+      const focusTarget = target || main;
+      focusTarget?.setAttribute("tabindex", "-1");
+      focusTarget?.focus({ preventScroll: true });
+    }
+    previousPathRef.current = pathname;
+    if (target) target.scrollIntoView({ behavior: "instant" });
+    else window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }, [route, previousPathRef]);
+  return null;
 }
 
 function ProductionRoute({ route }) {
   if (route.id === "home") return <HomePage />;
   if (route.id === "work") return <WorkPage />;
   if (route.id === "project") return <ProjectPage slug={route.params.slug} />;
-  if (["product", "growth", "creative"].includes(route.id)) return <RoleViewPage mode={route.id} />;
+  if (["product", "growth", "creative", "ai-native"].includes(route.id)) return <RoleViewPage mode={route.id} />;
   if (route.id === "about") return <AboutPage />;
   return <NotFoundPage reason={route.reason} slug={route.params.slug} />;
 }
 
 export function AppRouter() {
   const [route, setRoute] = useState(getCurrentRoute);
+  const previousPathRef = useRef(window.location.pathname);
 
   useEffect(() => {
     const handleLocationChange = () => setRoute(getCurrentRoute());
     window.addEventListener("popstate", handleLocationChange);
-    return () => window.removeEventListener("popstate", handleLocationChange);
+    window.addEventListener("hashchange", handleLocationChange);
+    return () => {
+      window.removeEventListener("popstate", handleLocationChange);
+      window.removeEventListener("hashchange", handleLocationChange);
+    };
   }, []);
 
   useEffect(() => {
     const project = route.id === "project" ? getPublicProject(route.params.slug) : null;
     applyRouteMetadata(route, project);
-    const targetId = window.location.hash.slice(1);
-    if (targetId) {
-      requestAnimationFrame(() => document.getElementById(targetId)?.scrollIntoView());
-    } else {
-      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-    }
   }, [route]);
 
   useEffect(() => {
@@ -94,11 +128,25 @@ export function AppRouter() {
   }
 
   return (
-    <div className="production-shell">
-      <Navigation />
-      <Suspense fallback={<LoadingPage />}>
-        <ProductionRoute route={route} />
-      </Suspense>
-    </div>
+    <MotionConfig reducedMotion="user">
+      <div className="shell" data-route={route.id}>
+        <Navigation route={route} />
+        <PageErrorBoundary key={`${route.id}/${route.params.slug || ""}`}>
+          <Suspense fallback={<LoadingPage />}>
+            <motion.div
+              key={`${route.id}/${route.params.slug || ""}`}
+              className="route-frame"
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: [0.2, 0.7, 0.1, 1] }}
+            >
+              <ProductionRoute route={route} />
+            </motion.div>
+            <RouteReady route={route} previousPathRef={previousPathRef} />
+            <SiteFooter profile={getHomePageContent().profile} />
+          </Suspense>
+        </PageErrorBoundary>
+      </div>
+    </MotionConfig>
   );
 }

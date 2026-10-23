@@ -6,18 +6,29 @@ import { publicResumeHref } from "../../utils/paths.js";
 
 const { profile } = getHomePageContent();
 const resumeHref = publicResumeHref(profile.resume);
-const menuItems = [
-  ["项目", "/work"],
-  ["经历", "/#experience"],
-  ["岗位视角", "/#role-lens"],
-  ["实验", "/#lab"],
-  ["关于", "/about"],
+
+const PRIMARY = [
+  ["作品", "/work", ["work", "project", "product", "growth", "creative", "ai-native"]],
+  ["关于", "/about", ["about"]],
 ];
 
-export function Navigation() {
+const MOBILE = [
+  ["代表项目", "/#work"],
+  ["全部作品", "/work"],
+  ["按岗位看", "/work#lens"],
+  ["创意实验", "/creative"],
+  ["关于我", "/about"],
+];
+
+export function Navigation({ route }) {
   const [open, setOpen] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const [solid, setSolid] = useState(false);
   const triggerRef = useRef(null);
   const menuRef = useRef(null);
+  const [menuRoute, setMenuRoute] = useState(route);
+  if (menuRoute !== route) { setMenuRoute(route); setOpen(false); }
+  const onDarkHero = route?.id === "home" && !solid;
 
   const closeMenu = ({ restoreFocus = false } = {}) => {
     setOpen(false);
@@ -25,81 +36,98 @@ export function Navigation() {
   };
 
   useEffect(() => {
-    if (!open) return undefined;
-    const focusable = [...menuRef.current.querySelectorAll("a[href], button:not([disabled])")];
-    focusable[0]?.focus();
-    const handleKeyDown = (event) => {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        closeMenu({ restoreFocus: true });
-        return;
-      }
-      if (event.key !== "Tab" || focusable.length === 0) return;
-      const first = focusable[0];
-      const last = focusable.at(-1);
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault();
-        first.focus();
-      }
+    let last = window.scrollY;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const y = window.scrollY;
+      setSolid(y > 24);
+      setHidden(y > 320 && y > last + 4 ? true : y < last - 4 ? false : (current) => current);
+      last = y;
     };
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [open]);
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(update); };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => { window.removeEventListener("scroll", onScroll); cancelAnimationFrame(frame); };
+  }, [route]);
 
   useEffect(() => {
-    const handleRouteChange = () => setOpen(false);
-    window.addEventListener("popstate", handleRouteChange);
-    return () => window.removeEventListener("popstate", handleRouteChange);
-  }, []);
+    if (!open) return undefined;
+    document.body.classList.add("has-menu");
+    menuRef.current?.querySelector("a[href]")?.focus();
+    const onKey = (event) => {
+      if (event.key === "Escape") { event.preventDefault(); closeMenu({ restoreFocus: true }); return; }
+      if (event.key !== "Tab") return;
+      const items = [triggerRef.current, ...menuRef.current.querySelectorAll("a[href]")];
+      const first = items[0];
+      const lastItem = items.at(-1);
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); lastItem.focus(); }
+      else if (!event.shiftKey && document.activeElement === lastItem) { event.preventDefault(); first.focus(); }
+    };
+    const desktop = window.matchMedia("(min-width: 900px)");
+    const onResize = () => { if (desktop.matches) closeMenu(); };
+    document.addEventListener("keydown", onKey);
+    desktop.addEventListener("change", onResize);
+    return () => {
+      document.body.classList.remove("has-menu");
+      document.removeEventListener("keydown", onKey);
+      desktop.removeEventListener("change", onResize);
+    };
+  }, [open]);
+
 
   return (
     <>
-      <a className="final-hybrid__skip" href="#main-content" onClick={() => {
+      <a className="skip" href="#main-content" onClick={() => {
         const main = document.getElementById("main-content");
         main?.setAttribute("tabindex", "-1");
         main?.focus();
       }}>跳到主要内容</a>
-      <header className="final-hybrid__nav">
-        <AppLink className="final-hybrid__brand" to="/" aria-label={`${profile.name}的作品集首页`}>
-          <strong>ZSY</strong><span>个人作品集 / 2027</span>
-        </AppLink>
-        <nav className="final-hybrid__nav-links" aria-label="作品集导航">
-          <AppLink to="/work">项目</AppLink>
-          <AppLink to="/about">关于我</AppLink>
-          <AppLink to="/#role-lens">岗位视角</AppLink>
-          <AppLink to="/#lab">实验</AppLink>
-          <a href={resumeHref}>简历</a>
-          <a href={profile.publicLinks.github} target="_blank" rel="noreferrer">GitHub</a>
-          <a href={`mailto:${profile.contact.email}`}>联系</a>
-        </nav>
-        <div className="final-hybrid__mobile-actions">
-          <a href={resumeHref}>简历</a>
+      <header className={`nav${solid ? " is-solid" : ""}${hidden && !open ? " is-hidden" : ""}${onDarkHero && !open ? " is-on-dark" : ""}${open ? " is-open" : ""}`}>
+        <div className="nav__inner wrap">
+          <AppLink className="nav__brand" to="/" aria-label={`${profile.name}的作品集首页`}>
+            <span className="nav__mark" aria-hidden="true">ZSY</span>
+            <span className="nav__name">{profile.name}<small>{profile.englishName}</small></span>
+          </AppLink>
+          <nav className="nav__links" aria-label="主导航">
+            {PRIMARY.map(([label, to, ids]) => (
+              <AppLink key={to} to={to} aria-current={ids.includes(route?.id) ? "page" : undefined}>{label}</AppLink>
+            ))}
+            <a href={resumeHref} download>简历 <span aria-hidden="true">↓</span></a>
+            <a href="#contact" className="nav__cta">联系我</a>
+          </nav>
           <button
             ref={triggerRef}
             type="button"
+            className="nav__toggle"
             aria-expanded={open}
-            aria-controls="production-mobile-menu"
-            onClick={() => open ? closeMenu({ restoreFocus: true }) : setOpen(true)}
+            aria-controls="mobile-menu"
+            onClick={() => (open ? closeMenu({ restoreFocus: true }) : setOpen(true))}
           >
-            {open ? "关闭" : "菜单"}
+            <span>{open ? "关闭" : "菜单"}</span>
+            <i aria-hidden="true" />
           </button>
         </div>
         <nav
           ref={menuRef}
-          id="production-mobile-menu"
-          className={`final-hybrid__mobile-menu${open ? " is-open" : ""}`}
-          aria-label="移动端作品集导航"
+          id="mobile-menu"
+          className={`sheet-menu${open ? " is-open" : ""}`}
+          aria-label="移动端导航"
           aria-hidden={!open}
+          inert={!open}
         >
-          {menuItems.map(([label, to]) => (
-            <AppLink key={to} to={to} onClick={() => closeMenu()}>{label}</AppLink>
-          ))}
-          <a href={resumeHref} onClick={() => closeMenu()}>简历</a>
-          <a href={profile.publicLinks.github} target="_blank" rel="noreferrer" onClick={() => closeMenu()}>GitHub</a>
-          <a href={`mailto:${profile.contact.email}`} onClick={() => closeMenu()}>联系</a>
+          <ol>
+            {MOBILE.map(([label, to], index) => (
+              <li key={to} style={{ "--i": index }}>
+                <AppLink to={to} onClick={() => closeMenu()}><span>{String(index + 1).padStart(2, "0")}</span>{label}</AppLink>
+              </li>
+            ))}
+          </ol>
+          <div className="sheet-menu__foot">
+            <a href={resumeHref} download onClick={() => closeMenu()}>下载简历 PDF</a>
+            <a href={`mailto:${profile.contact.email}`} onClick={() => closeMenu()}>{profile.contact.email}</a>
+            <a href={profile.publicLinks.github} target="_blank" rel="noreferrer" onClick={() => closeMenu()}>GitHub ↗</a>
+          </div>
         </nav>
       </header>
     </>

@@ -69,6 +69,15 @@ export function getWorkIndexContent() {
   return selectWorkIndex();
 }
 
+export function getHomeFeaturedProjects(roleLensId = "all") {
+  const featured = getHomePageContent().featuredProjects;
+  const order = new Map(selectProjectsForRole(roleLensId).map((project, index) => [project.id, index]));
+  return [...featured].sort((a, b) =>
+    (order.get(a.id) ?? Number.MAX_SAFE_INTEGER) - (order.get(b.id) ?? Number.MAX_SAFE_INTEGER)
+    || byHomepagePriority(a, b),
+  );
+}
+
 export function getPublicProject(slug) {
   const project = selectCaseStudies().find((item) => item.slug === slug);
   if (!project) return null;
@@ -88,11 +97,17 @@ export function getRoleViewContent(roleLensId) {
 }
 
 export function getRolePageContent(mode) {
+  if (mode === "ai-native") return {
+    eyebrow: "AI Native",
+    title: "让 AI 参与真实交付。",
+    description: "从代码理解、需求拆解到联调与上线：看 AI 辅助了什么，以及人如何判断和收口。",
+    projects: selectProjectsForRole("aiNative"),
+  };
   if (mode === "creative") {
     return {
       eyebrow: "Creative Lab",
-      title: "Creative range, not primary proof.",
-      description: "实验、交互与影像展示跨媒介能力，并与真实业务项目保持清晰层级。",
+      title: "交互与影像实验",
+      description: "交互网页、影像练习和广告脚本模拟，记录我在叙事、视觉与交互上的尝试。",
       projects: selectWorkIndex().lab,
     };
   }

@@ -114,26 +114,29 @@ export const publicContent = Object.freeze({
           "软件工程同事完成的全部正式工程成果"
         ]
       },
-      "summary": "面向新人带教与人才培养场景的多角色内部产品框架。",
+      "summary": "参与企业人才培养平台的早期产品方案与核心框架，梳理学员、导师与管理员之间的关系、权限和状态变化。",
       "context": "项目围绕新人带教与人才培养展开，需要同时处理学员、导师与 HRBP / 管理员的使用目标。",
-      "problem": "约 480 对师徒、约 6 个月培养周期中的关系、权限、部门层级和变化需要持续同步。",
+      "problem": "师徒关系、部门层级或导师发生变化时，各角色看到的信息与可操作范围需要保持一致，培养状态也需要持续同步。",
       "constraints": [
         "多角色权限与部门数据隔离",
         "师徒关系和培养状态会持续变化",
         "内部数据与系统界面不能直接公开"
       ],
       "decisions": [
-        "先梳理学员、导师与 HRBP / 管理员需求",
-        "建立核心模块与权限框架",
-        "用 AI 辅助推进原型与本人参与功能"
+        "先分别梳理学员、导师与 HRBP / 管理员需要看到的信息和完成的操作，再建立核心模块。",
+        "将师徒关系、部门层级和权限放在同一框架中考虑，覆盖导师变更、权限同步与异常数据处理。",
+        "用 AI 辅助推进原型与本人参与的功能实现，围绕实际功能迭代和问题排查继续调整。"
       ],
+      "decisionStory": null,
+      "creativeDrafts": null,
       "outcomes": [
         "相关功能框架后续用于约 480 对师徒的人才培养场景"
       ],
-      "reflection": "角色、权限与状态变化需要在界面之前被共同建模；公开叙事也必须把早期方案、本人参与实现和后续工程成果分开说明。",
+      "reflection": "多角色产品的难点不只是增加页面，而是让关系、权限和状态变化一起成立。我的工作重点是早期方案与核心框架，以及本人参与部分的功能迭代。",
       "claims": [
         {
           "id": "eaglehub-mentor-pairs",
+          "kind": "BUSINESS_CONTEXT",
           "projectId": "eaglehub",
           "label": "师徒培养管理场景",
           "value": "≈480 对",
@@ -143,6 +146,7 @@ export const publicContent = Object.freeze({
         },
         {
           "id": "eaglehub-cycle",
+          "kind": "BUSINESS_CONTEXT",
           "projectId": "eaglehub",
           "label": "培养周期",
           "value": "约 6 个月",
@@ -256,7 +260,7 @@ export const publicContent = Object.freeze({
           "完整生产系统独立开发"
         ]
       },
-      "summary": "把人工入职规则转化为可验证的 read-only 自动化流程。",
+      "summary": "把人员类型、职级和已有记录的重复核对，整理为先只读验证、再人工复核的入职自动化流程。",
       "context": "新人入职信息来自花名册与业务数据，人工需要根据人员类型、职级和既有记录完成多步核对。",
       "problem": "花名册、人员类型、导航路径和已有记录之间存在重复人工核对。",
       "constraints": [
@@ -265,10 +269,12 @@ export const publicContent = Object.freeze({
         "员工数据、字段值和内部标识不得公开"
       ],
       "decisions": [
-        "按职级与员工类型路由",
-        "逐字段比较已有记录",
-        "先 Dry-run 与人工 review，再评估写入"
+        "按职级与员工类型确定处理路径，避免不同人员沿用同一套规则。",
+        "逐字段比较已有记录，把差异整理为可供人工复核的输出。",
+        "先进行只读试跑和人工复核，再评估写入；不把生成结果直接提交到生产环境。"
       ],
+      "decisionStory": null,
+      "creativeDrafts": null,
       "outcomes": [
         "测试样本中目标字段曾达到 11 / 11 一致"
       ],
@@ -276,8 +282,9 @@ export const publicContent = Object.freeze({
       "claims": [
         {
           "id": "onboarding-sample-match",
+          "kind": "TEST_RESULT",
           "projectId": "onboarding-automation",
-          "label": "测试样本目标字段一致",
+          "label": "只读试跑的目标字段核对",
           "value": "11 / 11",
           "context": "Dry-run 测试样本；不是生产准确率",
           "evidenceIds": [],
@@ -384,7 +391,7 @@ export const publicContent = Object.freeze({
           "未经证据支持的转化或商业结果"
         ]
       },
-      "summary": "将高频内容生产拆成 Claude + Gemini 辅助、人工判断收口的可重复流程。",
+      "summary": "用 Claude + Gemini 辅助内容生产，将选题、资料、结构、初稿与人工校验整理为可重复流程。",
       "context": "真实内容运营场景需要在高频更新、选题判断和表达质量之间保持稳定节奏。",
       "problem": "高频更新、选题质量与生产效率需要同时成立。",
       "constraints": [
@@ -393,9 +400,12 @@ export const publicContent = Object.freeze({
         "业务数据只使用已脱敏截图"
       ],
       "decisions": [
-        "拆分选题、资料、结构、初稿与人工校验",
-        "AI 负责发散与初稿，人负责判断和最终表达"
+        "把选题、资料整理、内容结构、初稿与人工校验拆成独立步骤，明确每一步的任务。",
+        "让 Claude + Gemini 辅助发散与初稿，选题判断和最终表达仍由人工收口。",
+        "把人工校验保留在流程末端，同时关注更新节奏、单篇生产耗时与内容表现。"
       ],
+      "decisionStory": null,
+      "creativeDrafts": null,
       "outcomes": [
         "单篇约 2 小时缩短至约 20–30 分钟",
         "长期保持每周约 7 篇内容节奏"
@@ -403,27 +413,18 @@ export const publicContent = Object.freeze({
       "reflection": "效率来自对任务的拆分和人工收口，而不是把完整内容判断交给模型。",
       "claims": [
         {
-          "id": "content-growth-account",
+          "id": "content-growth-cycle",
+          "kind": "EFFICIENCY",
           "projectId": "ai-content-growth",
-          "label": "公众号用户规模",
-          "value": "约 55 万",
-          "context": "账号总规模 · 不是本人增长成果",
-          "evidenceIds": [
-            "content-growth-account-overview"
-          ],
-          "publicCaption": "后台脱敏截图 · 账号总规模，不归因为本人增长 · 2025.10"
-        },
-        {
-          "id": "content-growth-top-article",
-          "projectId": "ai-content-growth",
-          "label": "单篇最高阅读量",
-          "value": "2 万+",
-          "context": "Content Growth Case",
+          "label": "AI 内容工作流生产周期",
+          "value": "2h → 20–30min",
+          "context": "单篇内容生产流程",
           "evidenceIds": [],
-          "publicCaption": "用户确认 · 单篇内容表现"
+          "publicCaption": "用户确认 · 单篇内容工作流"
         },
         {
           "id": "content-growth-cadence",
+          "kind": "WORK_OUTPUT",
           "projectId": "ai-content-growth",
           "label": "长期内容节奏",
           "value": "每周约 7 篇",
@@ -432,13 +433,26 @@ export const publicContent = Object.freeze({
           "publicCaption": "用户确认 · 稳定内容产出节奏"
         },
         {
-          "id": "content-growth-cycle",
+          "id": "content-growth-top-article",
+          "kind": "CONTENT_RESULT",
           "projectId": "ai-content-growth",
-          "label": "AI 内容工作流生产周期",
-          "value": "2h → 20–30min",
-          "context": "单篇内容生产流程",
+          "label": "单篇最高阅读量",
+          "value": "2 万+",
+          "context": "Content Growth Case",
           "evidenceIds": [],
-          "publicCaption": "用户确认 · 单篇内容工作流"
+          "publicCaption": "用户确认 · 单篇内容表现"
+        },
+        {
+          "id": "content-growth-account",
+          "kind": "BUSINESS_CONTEXT",
+          "projectId": "ai-content-growth",
+          "label": "公众号用户规模",
+          "value": "约 55 万",
+          "context": "账号总规模 · 不是本人增长成果",
+          "evidenceIds": [
+            "content-growth-account-overview"
+          ],
+          "publicCaption": "后台脱敏截图 · 账号总规模，不归因为本人增长 · 2025.10"
         }
       ],
       "evidence": [
@@ -550,7 +564,7 @@ export const publicContent = Object.freeze({
           "全部集训运营结果由工具单独产生"
         ]
       },
-      "summary": "服务大型新人集训自由组队需求的内部工具。",
+      "summary": "参与自由组队工具搭建，将班级、队伍人数和建队 / 入队流程组织成适合手机操作的页面。",
       "context": "约 400–500 名学员分布在 5 个班级，需要在集训开始前完成可执行的自由组队。",
       "problem": "5 个班级的大规模学员需要在人数、班级和移动端约束下完成自由组队。",
       "constraints": [
@@ -560,9 +574,12 @@ export const publicContent = Object.freeze({
         "内部人员信息不能公开"
       ],
       "decisions": [
-        "以班级和队伍人数作为核心约束",
-        "兼顾信息卡片与移动端操作"
+        "先明确班级与队伍人数规则，再组织信息卡片、建队和入队操作。",
+        "将人数限制、班级展示和数据匹配纳入功能搭建，避免只完成页面而遗漏规则。",
+        "兼顾移动端操作，让学员能在手机上查看信息并完成组队；平台在集训前投入使用。"
       ],
+      "decisionStory": null,
+      "creativeDrafts": null,
       "outcomes": [
         "平台在集训前投入使用"
       ],
@@ -570,6 +587,7 @@ export const publicContent = Object.freeze({
       "claims": [
         {
           "id": "team-formation-scale",
+          "kind": "BUSINESS_CONTEXT",
           "projectId": "team-formation",
           "label": "自由组队业务规模",
           "value": "约 400–500 人",
@@ -579,6 +597,7 @@ export const publicContent = Object.freeze({
         },
         {
           "id": "team-formation-rules",
+          "kind": "BUSINESS_RULE",
           "projectId": "team-formation",
           "label": "组队人数规则",
           "value": "每队约 10–12 人",
@@ -682,11 +701,14 @@ export const publicContent = Object.freeze({
         "个人贡献不能替代团队项目结果"
       ],
       "decisions": [],
+      "decisionStory": null,
+      "creativeDrafts": null,
       "outcomes": [],
       "reflection": "规模化执行需要把信息、现场、反馈和收尾当作一条连续的协作链。",
       "claims": [
         {
           "id": "eagle-training-scale",
+          "kind": "BUSINESS_CONTEXT",
           "projectId": "eagle-training",
           "label": "大型新人培养项目规模",
           "value": "400–500 人",
@@ -715,6 +737,180 @@ export const publicContent = Object.freeze({
       "caseStudy": {
         "enabled": false,
         "sections": []
+      }
+    },
+    {
+      "id": "globridge",
+      "slug": "globridge",
+      "title": "Globridge 出海咨询官网",
+      "shortTitle": "Globridge",
+      "englishTitle": "Globridge",
+      "classification": [
+        "REAL_PROJECT"
+      ],
+      "deliveryStatus": "SHIPPED",
+      "homepagePriority": 4,
+      "placement": "FEATURED",
+      "roleLensRelevance": {
+        "aiProduct": 85,
+        "productOps": 65,
+        "projectOps": 60,
+        "growth": 0,
+        "aiNative": 100
+      },
+      "publicRole": "全栈开发 / AI-assisted Full-stack Development",
+      "contributionBoundary": {
+        "owned": [
+          "存量代码理解与需求拆解",
+          "本人开发范围内的实现判断与问题排查"
+        ],
+        "contributed": [
+          "前端功能与页面迭代",
+          "后端 / API 联调",
+          "云端部署与维护",
+          "使用 Codex 等 AI 开发工具辅助真实开发"
+        ],
+        "collaborated": [
+          "在已有代码基础上推进全栈交付"
+        ],
+        "notClaimed": [
+          "全部存量代码的原创开发",
+          "官网业务数字、客户案例与市场成绩",
+          "未公开的后台界面或源代码"
+        ]
+      },
+      "summary": "接手已有官网代码，保留沙盘已验证的 CloudBase 后端，以独立模块接入 globridge.cn，并推进页面迭代与 API 联调。",
+      "context": "Globridge 是面向企业出海咨询的公开官网，呈现咨询服务、研究洞察与联系入口。我的公开角色是全栈开发，工作建立在已有代码基础上。",
+      "problem": "沙盘功能已经能够独立运行，但需要接入现有官网；原站服务器部署、Nginx 和构建方式等交接信息并不完整。",
+      "constraints": [
+        "保留已经可用的沙盘前端与 CloudBase 云函数后端",
+        "原网站的服务器部署、Nginx 与构建交接信息不完整",
+        "接入前需要验证静态资源路径、安全域名与前后端调用"
+      ],
+      "decisions": [
+        "接手：以已有代码为起点，明确本次开发是在存量项目上迭代。",
+        "理解：借助 Codex 等 AI 开发工具理解代码，结合页面、功能与接口关系建立上下文。",
+        "拆解：把需求落到可实施的修改范围，由我判断改动与已有实现的关系。",
+        "构建：推进前端功能与页面迭代，用 AI 辅助实现，而不是仅生成孤立的页面。",
+        "联调：参与后端 / API 联调，把界面和接口放到同一个运行过程里检查。",
+        "调试：参与问题排查，结合实际运行判断问题所在，不能只凭代码生成结果认定完成。",
+        "上线：参与云端部署与维护，把开发工作延伸到真实运行环境。"
+      ],
+      "decisionStory": {
+        "title": "沙盘接入：保留已验证的 CloudBase 后端",
+        "problem": "沙盘已有可独立运行的前端和腾讯 CloudBase 云函数后端，需要接入 globridge.cn；但原站服务器部署、Nginx 与构建方式等交接信息并不完整。",
+        "options": [
+          "按照原网站架构重构沙盘",
+          "将云函数和数据逻辑一起迁移到网站服务器",
+          "保留 CloudBase 后端，以独立模块接入现有网站"
+        ],
+        "selectedOption": 2,
+        "rationale": "第三种方案改动范围最小，不依赖尚未掌握的服务器环境，也避免为了技术统一重新实现已经正常工作的后端。",
+        "validation": [
+          "核对 /sandbox/ 下的静态资源路径",
+          "核对 CloudBase Web 安全域名",
+          "核对云函数 HTTP 地址",
+          "检查前后端实际调用"
+        ],
+        "outcome": "确认页面能够正常访问、核心功能能够完成调用后，再继续网站集成和后续迭代。",
+        "publicCaption": "本人项目经历说明"
+      },
+      "creativeDrafts": null,
+      "outcomes": [
+        "Globridge 出海咨询官网已上线，可直接访问真实页面。",
+        "完成范围涵盖存量代码理解、页面迭代、API 联调、问题排查与云端部署维护。"
+      ],
+      "reflection": "AI 可以辅助理解代码和推进实现，但需求是否被正确拆解、修改是否适合已有代码、接口是否在真实环境中正常工作，都需要我结合上下文判断。生成代码只是过程的一部分，联调、调试与上线维护仍是交付工作。",
+      "claims": [],
+      "evidence": [
+        {
+          "id": "globridge-home",
+          "type": "SCREENSHOT",
+          "asset": "assets/evidence/globridge/home.jpg",
+          "caption": "公开官网首页 · 真实运行画面",
+          "dateRange": "2026-09-10 · www.globridge.cn · 公开页面采集",
+          "projectId": "globridge",
+          "supportsClaims": [],
+          "alt": "Globridge 出海咨询官网：公开官网首页 · 真实运行画面",
+          "width": 1440,
+          "height": 900,
+          "sources": [],
+          "publicSafe": true,
+          "provenanceLabel": "真实公开作品"
+        },
+        {
+          "id": "globridge-services",
+          "type": "SCREENSHOT",
+          "asset": "assets/evidence/globridge/services.jpg",
+          "caption": "咨询服务页面 · 真实锚点导航后的画面",
+          "dateRange": "2026-09-10 · www.globridge.cn · 公开页面采集",
+          "projectId": "globridge",
+          "supportsClaims": [],
+          "alt": "Globridge 出海咨询官网：咨询服务页面 · 真实锚点导航后的画面",
+          "width": 1440,
+          "height": 900,
+          "sources": [],
+          "publicSafe": true,
+          "provenanceLabel": "真实公开作品"
+        },
+        {
+          "id": "globridge-mobile",
+          "type": "SCREENSHOT",
+          "asset": "assets/evidence/globridge/mobile.jpg",
+          "caption": "移动端首页 · 390px 实际浏览画面",
+          "dateRange": "2026-09-10 · www.globridge.cn · 公开页面采集",
+          "projectId": "globridge",
+          "supportsClaims": [],
+          "alt": "Globridge 出海咨询官网：移动端首页 · 390px 实际浏览画面",
+          "width": 390,
+          "height": 844,
+          "sources": [],
+          "publicSafe": true,
+          "provenanceLabel": "真实公开作品"
+        },
+        {
+          "id": "globridge-preview",
+          "type": "VIDEO",
+          "asset": "assets/evidence/globridge/preview.webm",
+          "caption": "7 秒静音录屏 · 首页动态与咨询服务导航",
+          "dateRange": "2026-09-10 · www.globridge.cn · 公开页面采集",
+          "projectId": "globridge",
+          "supportsClaims": [],
+          "alt": "Globridge 出海咨询官网：7 秒静音录屏 · 首页动态与咨询服务导航",
+          "width": 1280,
+          "height": 800,
+          "sources": [],
+          "publicSafe": true,
+          "provenanceLabel": "真实公开作品"
+        },
+        {
+          "id": "globridge-live",
+          "type": "LIVE_DEMO",
+          "asset": "https://www.globridge.cn/",
+          "caption": "访问线上网站 ↗",
+          "dateRange": "2026-09-10 · www.globridge.cn · 公开页面采集",
+          "projectId": "globridge",
+          "supportsClaims": [],
+          "alt": "Globridge 出海咨询官网：访问线上网站 ↗",
+          "width": null,
+          "height": null,
+          "sources": [],
+          "publicSafe": true,
+          "provenanceLabel": "真实公开作品"
+        }
+      ],
+      "caseStudy": {
+        "enabled": true,
+        "sections": [
+          "overview",
+          "context",
+          "role",
+          "decisions",
+          "evidence",
+          "outcomes",
+          "boundary",
+          "reflection"
+        ]
       }
     },
     {
@@ -747,13 +943,18 @@ export const publicContent = Object.freeze({
         "collaborated": [],
         "notClaimed": []
       },
-      "summary": "围绕记忆、空间与个人叙事的交互网页实验。",
-      "context": null,
-      "problem": null,
+      "summary": "以童年回忆为入口，将个人片段组织为展厅式的交互网页原型。",
+      "context": "围绕回忆问题、展厅与时间线组织个人叙事，探索网页如何承载记忆与空间感。",
+      "problem": "让用户从一个具体的记忆片段开始表达，再逐步进入更完整的个人叙事。",
       "constraints": [],
-      "decisions": [],
+      "decisions": [
+        "用童年展厅和具体回忆问题引导输入，为个人叙事提供起点。",
+        "通过展厅与时间线入口组织浏览，让回忆在网页中具有空间和顺序。"
+      ],
+      "decisionStory": null,
+      "creativeDrafts": null,
       "outcomes": [
-        "可运行交互网页"
+        "形成交互网页原型，并提供界面截图与公开体验入口"
       ],
       "reflection": null,
       "claims": [],
@@ -797,6 +998,19 @@ export const publicContent = Object.freeze({
           ],
           "publicSafe": true,
           "provenanceLabel": "真实脱敏截图"
+        },
+        {
+          "id": "memory-museum-live",
+          "type": "LIVE_DEMO",
+          "asset": "https://memory-museum-pi.vercel.app/",
+          "caption": "体验记忆博物馆 ↗",
+          "dateRange": "2026-10-03 · 首页与童年展厅入口已核验；AI 生成流程未核验",
+          "projectId": "memory-museum",
+          "supportsClaims": [],
+          "alt": "打开记忆博物馆交互网页",
+          "sources": [],
+          "publicSafe": true,
+          "provenanceLabel": "真实公开作品"
         }
       ],
       "caseStudy": {
@@ -839,11 +1053,13 @@ export const publicContent = Object.freeze({
         "collaborated": [],
         "notClaimed": []
       },
-      "summary": "个人视频与动态视觉练习。",
+      "summary": "从创意构思、素材组织到剪辑与后期制作的个人影像练习，成片《照见痕迹》可直接观看。",
       "context": null,
       "problem": null,
       "constraints": [],
       "decisions": [],
+      "decisionStory": null,
+      "creativeDrafts": null,
       "outcomes": [
         "Bilibili 可观看成片"
       ],
@@ -901,11 +1117,105 @@ export const publicContent = Object.freeze({
         "collaborated": [],
         "notClaimed": []
       },
-      "summary": "游戏广告脚本与前三秒 hook 的模拟练习。",
-      "context": null,
-      "problem": null,
+      "summary": "围绕休闲、策略与卡牌方向，拆解前三秒开头、玩家反应、反转点与可拍画面，形成短视频脚本草稿。",
+      "context": "面向游戏短视频素材的自主创意练习，使用虚构玩家反应、群聊和弹幕组织叙事。",
+      "problem": "在很短的开头里让观众理解冲突，并将玩法卖点转化为可以执行的画面与节奏。",
       "constraints": [],
-      "decisions": [],
+      "decisions": [
+        "先拆前三秒开头，再安排玩家反应、冲突与反转。",
+        "把创意落到录屏、字幕、反应镜头、群聊和弹幕等画面形式。",
+        "每条脚本围绕一个主要冲突展开，不在开头解释全部玩法。"
+      ],
+      "decisionStory": null,
+      "creativeDrafts": {
+        "publicCaption": "模拟创意草稿 · 未投放，不代表真实玩家反应或广告效果",
+        "hookGroups": [
+          {
+            "category": "休闲解压类",
+            "hooks": [
+              "我发誓我只想玩一关。",
+              "这游戏看起来像给小学生玩的，然后我卡了 40 分钟。",
+              "别急着笑，你上你也不一定行。",
+              "我现在知道为什么它没有退出按钮了。"
+            ]
+          },
+          {
+            "category": "策略 / SLG 类",
+            "hooks": [
+              "联盟群刚说和平发育，我家已经冒烟了。",
+              "他问我为什么不反击，因为我在等他全军出门。",
+              "这游戏最恐怖的地方：昨晚还叫你兄弟的人。",
+              "我装了三天死人，今天地图该换颜色了。"
+            ]
+          },
+          {
+            "category": "卡牌 / 二次元类",
+            "hooks": [
+              "我差点把这张卡分解了。",
+              "主播说这阵容没用，然后他被控到没说话。",
+              "抽卡前：最后一次。抽卡后：再充一次也行吧。",
+              "这角色看着像仓管，结果一上场全队变正常了。"
+            ]
+          }
+        ],
+        "scripts": [
+          {
+            "title": "这游戏看着不难，直到我朋友开始不说话",
+            "type": "休闲解压 / 朋友破防型",
+            "format": "手机录屏 + 朋友反应 + 大字字幕",
+            "beats": [
+              "0-2s：朋友：“这不有手就行？”",
+              "2-6s：第一次失败，笑。",
+              "6-12s：第二次失败，不笑了。",
+              "12-18s：第三次只差一点，手停在屏幕上。",
+              "18-24s：字幕：“这把不算。”",
+              "24-30s：画面切到他还在玩，时间已经过去 28 分钟。"
+            ],
+            "note": "重点放在朋友从轻松到较真的变化，不急着解释全部玩法。"
+          },
+          {
+            "title": "评论区说第一关闭眼过",
+            "type": "休闲解压 / 评论区挑战型",
+            "format": "假评论 + 实机录屏 + 失败合集",
+            "beats": [
+              "0-3s：评论弹出：“第一关闭眼都能过。”",
+              "3-8s：玩家真的闭眼操作，立刻翻车。",
+              "8-15s：正常玩也翻车。",
+              "15-22s：终于过关，结果下一关更离谱。",
+              "22-30s：字幕：“闭眼过的那位，出来一下。”"
+            ],
+            "note": "用评论区制造参与感，适合做系列。"
+          },
+          {
+            "title": "成年人最脆弱的关系：游戏里的临时联盟",
+            "type": "SLG / 群聊背刺型",
+            "format": "群聊截图 + 地图红线 + 战报弹窗",
+            "beats": [
+              "0-3s：群聊：“今晚都别打，和平发育。”",
+              "3-5s：地图上三条红线同时飞向我家。",
+              "5-10s：我：“收到。”",
+              "10-18s：镜头切资源、迁城、集结，假装没反应。",
+              "18-25s：对方主力出门后，我绕后偷家。",
+              "25-30s：群聊安静，只剩系统战报。"
+            ],
+            "note": "别写成热血反杀，写成人情世故翻车现场。"
+          },
+          {
+            "title": "他说低星卡没用，然后被低星队教育了",
+            "type": "卡牌 / 主播沉默型",
+            "format": "主播切片 + 战斗录屏 + 表情定格",
+            "beats": [
+              "0-3s：主播：“这队能赢我直接下播。”",
+              "3-8s：对面低星角色先手控制。",
+              "8-15s：主播还在解释：“没事，他没伤害。”",
+              "15-22s：连击触发，血条消失。",
+              "22-26s：主播沉默，鼠标不动。",
+              "26-30s：弹幕：“还下播吗？”"
+            ],
+            "note": "卡牌广告不要只写抽卡，配队反差更容易显得懂游戏。"
+          }
+        ]
+      },
       "outcomes": [],
       "reflection": null,
       "claims": [],
@@ -922,7 +1232,18 @@ export const publicContent = Object.freeze({
   ],
   "quickProofs": [
     {
+      "id": "content-growth-cycle",
+      "kind": "EFFICIENCY",
+      "projectId": "ai-content-growth",
+      "label": "AI 内容工作流生产周期",
+      "value": "2h → 20–30min",
+      "context": "单篇内容生产流程",
+      "evidenceIds": [],
+      "publicCaption": "用户确认 · 单篇内容工作流"
+    },
+    {
       "id": "eagle-training-scale",
+      "kind": "BUSINESS_CONTEXT",
       "projectId": "eagle-training",
       "label": "大型新人培养项目规模",
       "value": "400–500 人",
@@ -932,21 +1253,13 @@ export const publicContent = Object.freeze({
     },
     {
       "id": "eaglehub-mentor-pairs",
+      "kind": "BUSINESS_CONTEXT",
       "projectId": "eaglehub",
       "label": "师徒培养管理场景",
       "value": "≈480 对",
       "context": "约 6 个月培养周期",
       "evidenceIds": [],
       "publicCaption": "人才培养场景 · 约 6 个月"
-    },
-    {
-      "id": "content-growth-cycle",
-      "projectId": "ai-content-growth",
-      "label": "AI 内容工作流生产周期",
-      "value": "2h → 20–30min",
-      "context": "单篇内容生产流程",
-      "evidenceIds": [],
-      "publicCaption": "用户确认 · 单篇内容工作流"
     }
   ],
   "experience": [
@@ -974,12 +1287,21 @@ export const publicContent = Object.freeze({
   ],
   "capabilities": [
     {
+      "id": "full-stack-delivery",
+      "label": "Full-stack Delivery",
+      "why": "理解存量代码、拆解需求，并通过前后端联调、排查与云端维护推进交付。",
+      "projectIds": [
+        "globridge"
+      ]
+    },
+    {
       "id": "product-framing",
       "label": "Product Framing",
       "why": "把多角色业务问题整理为可讨论、可迭代的产品框架。",
       "projectIds": [
         "eaglehub",
-        "team-formation"
+        "team-formation",
+        "globridge"
       ]
     },
     {
@@ -997,7 +1319,8 @@ export const publicContent = Object.freeze({
       "why": "让 AI 承担可复用环节，同时保留人工判断与复核。",
       "projectIds": [
         "onboarding-automation",
-        "ai-content-growth"
+        "ai-content-growth",
+        "globridge"
       ]
     },
     {
@@ -1007,7 +1330,8 @@ export const publicContent = Object.freeze({
       "projectIds": [
         "eagle-training",
         "team-formation",
-        "eaglehub"
+        "eaglehub",
+        "globridge"
       ]
     },
     {
@@ -1021,7 +1345,7 @@ export const publicContent = Object.freeze({
     {
       "id": "prototype-to-evidence",
       "label": "Prototype to Evidence",
-      "why": "用原型、Dry-run 与证据边界验证方案，而不是把原型描述成上线系统。",
+      "why": "用原型与流程试跑，检查规则、交互和流程输出。",
       "projectIds": [
         "onboarding-automation",
         "eaglehub"

@@ -18,8 +18,8 @@ export function EvidenceFigure({ evidence, zoom = false, index, total }) {
   if (evidence.type !== "SCREENSHOT" && evidence.type !== "PROCESS_DIAGRAM") {
     return (
       <figure className="evidence-figure" id={`evidence-${evidence.id}`}>
-        <a href={evidence.asset} target="_blank" rel="noreferrer">{evidence.alt || evidence.caption}</a>
-        <Caption><strong>{evidence.provenanceLabel}</strong><span>{evidence.caption}</span></Caption>
+        <a href={assetPath(evidence.asset)} target="_blank" rel="noreferrer">{evidence.alt || evidence.caption}</a>
+        <Caption><strong>{evidence.provenanceLabel}</strong><span>{evidence.caption}</span>{evidence.dateRange ? <small>{evidence.dateRange}</small> : null}</Caption>
       </figure>
     );
   }

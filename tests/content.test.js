@@ -15,6 +15,7 @@ import {
 import { assertValidContent, validateContent } from "../src/content/validation.js";
 import {
   CONTENT_STATUS,
+  CLAIM_KIND,
   EVIDENCE_ORIGIN,
   EVIDENCE_STATUS,
   EVIDENCE_TYPE,
@@ -28,11 +29,54 @@ test("canonical content passes validation", () => {
   assert.deepEqual(validateContent(content), []);
 });
 
+test("legacy creative drafts stay simulations and strip private notes", () => {
+  const fixture = structuredClone(content);
+  const raw = fixture.projects.find(project => project.id === "game-ads-simulation");
+  raw.creativeDrafts.sourceNote = "PRIVATE_DRAFT_SOURCE";
+  raw.creativeDrafts.scripts[0].internalNotes = "PRIVATE_DRAFT_NOTES";
+  const result = selectPublicProjectBySlug(raw.slug, fixture);
+  assert.equal(result.creativeDrafts.hookGroups.reduce((total, group) => total + group.hooks.length, 0), 12);
+  assert.equal(result.creativeDrafts.scripts.length, 4);
+  assert.match(result.creativeDrafts.publicCaption, /未投放/);
+  assert.equal(JSON.stringify(result).includes("PRIVATE_DRAFT"), false);
+
+  raw.placement = "FEATURED";
+  assert.equal(selectPublicProjectBySlug(raw.slug, fixture).creativeDrafts, null);
+  assert.ok(validateContent(fixture).some(error => error.code === "CREATIVE_DRAFTS_SCOPE_INVALID"));
+  raw.placement = "LAB";
+  raw.creativeDrafts.scripts[0].beats = [];
+  assert.ok(validateContent(fixture).some(error => error.code === "CREATIVE_DRAFTS_INCOMPLETE"));
+});
+
+test("decision narratives exclude unverified stories and private source notes", () => {
+  const fixture = structuredClone(content);
+  const raw = fixture.projects.find(project => project.id === "globridge");
+  raw.decisionStory.sourceNote = "PRIVATE_DECISION_SOURCE";
+  raw.decisionStory.internalNotes = "PRIVATE_DECISION_NOTES";
+  const confirmed = selectPublicProjectBySlug("globridge", fixture);
+  assert.ok(confirmed.decisionStory);
+  assert.equal(JSON.stringify(confirmed).includes("PRIVATE_DECISION"), false);
+  assert.equal("evidenceStatus" in confirmed.decisionStory, false);
+
+  raw.decisionStory.evidenceStatus = EVIDENCE_STATUS.NEEDS_VERIFICATION;
+  assert.equal(selectPublicProjectBySlug("globridge", fixture).decisionStory, null);
+});
+
+test("decision narratives reject missing validation and invalid option selection", () => {
+  const fixture = structuredClone(content);
+  const story = fixture.projects.find(project => project.id === "globridge").decisionStory;
+  story.selectedOption = story.options.length;
+  story.validation = [];
+  const codes = validateContent(fixture).map(error => error.code);
+  assert.ok(codes.includes("DECISION_STORY_SELECTION_INVALID"));
+  assert.ok(codes.includes("DECISION_STORY_INCOMPLETE"));
+});
+
 test("public project selectors strip internal governance fields and unsafe evidence", () => {
   const publicProjects = selectPublicProjects(content);
 
   assert.ok(publicProjects.length > 0);
-  assert.equal(publicProjects.some((project) => project.slug === "globridge"), false);
+  assert.equal(publicProjects.some((project) => project.slug === "globridge"), true);
   assert.equal(publicProjects.some((project) => project.slug === "digest"), false);
 
   for (const project of publicProjects) {
@@ -52,6 +96,7 @@ test("homepage selection requires safe visibility, readiness and explicit priori
     "eaglehub",
     "onboarding-automation",
     "ai-content-growth-workflow",
+    "globridge",
   ]);
   assert.ok(homepageProjects.every((project) =>
     ![CONTENT_STATUS.NEEDS_CONTENT, CONTENT_STATUS.NEEDS_REDACTION, CONTENT_STATUS.DRAFT]
@@ -73,12 +118,19 @@ test("quick proof is derived from eligible public claims and excludes verificati
   const quickProofs = selectQuickProofs(content);
 
   assert.deepEqual(quickProofs.map((claim) => claim.value), [
+    "2h → 20–30min",
     "400–500 人",
     "≈480 对",
-    "2h → 20–30min",
   ]);
   assert.ok(quickProofs.every((claim) => claim.evidenceStatus !== EVIDENCE_STATUS.NEEDS_VERIFICATION));
   assert.ok(quickProofs.every((claim) => !("sourceNote" in claim)));
+});
+
+test("metric categories cannot silently turn business context into work outcomes", () => {
+  const fixture = structuredClone(content);
+  fixture.claims.find(claim => claim.id === "eaglehub-mentor-pairs").kind = "UNKNOWN";
+  assert.ok(validateContent(fixture).some(error => error.code === "CLAIM_KIND_INVALID"));
+  assert.equal(claims.find(claim => claim.id === "eaglehub-mentor-pairs").kind, CLAIM_KIND.BUSINESS_CONTEXT);
 });
 
 test("role lenses sort the same public project source without duplicating facts", () => {

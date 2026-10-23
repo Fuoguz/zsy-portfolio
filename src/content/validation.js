@@ -1,4 +1,6 @@
 import {
+  CLAIM_KIND,
+  CLASSIFICATION,
   CONTENT_STATUS,
   EVIDENCE_ORIGIN,
   EVIDENCE_STATUS,
@@ -51,6 +53,35 @@ export function validateContent({ projects = [], claims = [], evidence = [], qui
       errors.push(createError("PROJECT_SLUG_INVALID", `Invalid project slug: ${project.slug}`, project.id));
     }
 
+    if (project.decisionStory) {
+      const story = project.decisionStory;
+      const hasText = value => typeof value === "string" && value.trim().length > 0;
+      if (
+        !["title", "problem", "rationale", "outcome", "publicCaption"].every(field => hasText(story[field]))
+        || !Array.isArray(story.options) || story.options.length < 2 || !story.options.every(hasText)
+        || !Array.isArray(story.validation) || !story.validation.length || !story.validation.every(hasText)
+        || !Object.values(EVIDENCE_STATUS).includes(story.evidenceStatus)
+      ) errors.push(createError("DECISION_STORY_INCOMPLETE", "Decision story requires complete narrative and verification status", project.id));
+      if (!Number.isInteger(story.selectedOption) || story.selectedOption < 0 || story.selectedOption >= (story.options?.length ?? 0)) {
+        errors.push(createError("DECISION_STORY_SELECTION_INVALID", "Decision story selection must reference an available option", project.id));
+      }
+    }
+
+    if (project.creativeDrafts) {
+      const drafts = project.creativeDrafts;
+      const hasText = value => typeof value === "string" && value.trim().length > 0;
+      if (project.placement !== "LAB" || !project.classification.includes(CLASSIFICATION.SIMULATION)) {
+        errors.push(createError("CREATIVE_DRAFTS_SCOPE_INVALID", "Draft scripts must remain simulation material in Lab", project.id));
+      }
+      if (!hasText(drafts.publicCaption)
+        || !Array.isArray(drafts.hookGroups) || !drafts.hookGroups.length
+        || !drafts.hookGroups.every(group => hasText(group.category) && Array.isArray(group.hooks) && group.hooks.length && group.hooks.every(hasText))
+        || !Array.isArray(drafts.scripts) || !drafts.scripts.length
+        || !drafts.scripts.every(script => ["title", "type", "format", "note"].every(field => hasText(script[field])) && Array.isArray(script.beats) && script.beats.length && script.beats.every(hasText))) {
+        errors.push(createError("CREATIVE_DRAFTS_INCOMPLETE", "Draft material requires hooks, timed scripts and a simulation caption", project.id));
+      }
+    }
+
     if (
       Number.isInteger(project.homepagePriority)
       && [CONTENT_STATUS.NEEDS_CONTENT, CONTENT_STATUS.DRAFT].includes(project.contentStatus)
@@ -82,6 +113,9 @@ export function validateContent({ projects = [], claims = [], evidence = [], qui
   }
 
   for (const claim of claims) {
+    if (!Object.values(CLAIM_KIND).includes(claim.kind)) {
+      errors.push(createError("CLAIM_KIND_INVALID", "Claim must distinguish work results, testing, context or rules", claim.id));
+    }
     if (!projectById.has(claim.projectId)) {
       errors.push(createError("CLAIM_PROJECT_MISSING", `Claim references unknown project: ${claim.projectId}`, claim.id));
     }

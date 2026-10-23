@@ -1,4 +1,4 @@
-import { useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 
 import { assetPath } from "../../utils/paths.js";
 import { ResponsiveImage } from "./ResponsiveImage.jsx";
@@ -12,7 +12,7 @@ const publicScope = (evidence) => {
   if (evidence.dateRange) return `时间范围 · ${evidence.dateRange}`;
   if (evidence.provenanceLabel.includes("重新绘制")) return "范围 · 公开安全的流程重绘";
   if (evidence.provenanceLabel.includes("DEMO DATA")) return "范围 · 匿名演示数据";
-  return "范围 · 公开项目证据";
+  return "范围 · 公开项目材料";
 };
 
 export function EvidenceViewer({ evidence, index, total }) {
@@ -21,6 +21,13 @@ export function EvidenceViewer({ evidence, index, total }) {
   const [isOpen, setIsOpen] = useState(false);
   const titleId = useId();
   const descriptionId = useId();
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    return () => {
+      if (dialog?.open) dialog.close();
+      document.body.classList.remove("has-evidence-viewer");
+    };
+  }, []);
 
   const close = () => dialogRef.current?.close();
   const open = () => {
@@ -60,10 +67,10 @@ export function EvidenceViewer({ evidence, index, total }) {
         type="button"
         onClick={open}
         aria-haspopup="dialog"
-        aria-label={`查看完整证据：${evidence.alt}`}
+        aria-label={`查看大图：${evidence.alt}`}
       >
         {triggerImage}
-        <span>查看完整证据</span>
+        <span>查看大图</span>
       </button>
       <dialog
         ref={dialogRef}
@@ -86,10 +93,10 @@ export function EvidenceViewer({ evidence, index, total }) {
         <div className="evidence-viewer__panel">
           <header>
             <div>
-              <span>{index && total ? `证据 ${String(index).padStart(2, "0")} / ${String(total).padStart(2, "0")}` : "证据"}</span>
+              <span>{index && total ? `材料 ${String(index).padStart(2, "0")} / ${String(total).padStart(2, "0")}` : "项目材料"}</span>
               <h2 id={titleId}>{evidence.provenanceLabel}</h2>
             </div>
-            <button type="button" onClick={close} aria-label="关闭证据查看器">关闭 ×</button>
+            <button type="button" onClick={close} aria-label="关闭图片查看器">关闭 ×</button>
           </header>
           <div className="evidence-viewer__media">
             {isOpen ? (

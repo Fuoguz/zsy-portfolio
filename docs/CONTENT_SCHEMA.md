@@ -1,3 +1,5 @@
+> 2026-09-10 更新：Globridge 已获用户确认并提升为 PUBLIC / READY / SHIPPED 的真实全栈 Case，含公开截图、录屏和 Live Link。下文早期版本中关于 Globridge potential / hidden / excluded 的记录已被 CONTENT_SOURCE_OF_TRUTH.md §6.5 取代。Digest 的公开规则不变。
+
 # ZSY Portfolio V2 — Content Schema
 
 > Stage: G4A  
@@ -41,7 +43,16 @@ Raw content may contain governance notes. Public UI never receives raw project o
   problem,
   constraints: [],
   decisions: [],
+  decisionStory: {             // optional; public selector excludes unverified stories
+    title, problem, options: [], selectedOption, rationale,
+    validation: [], outcome, publicCaption, evidenceStatus, sourceNote,
+  },
   outcomes: [],
+  creativeDrafts: {            // optional; only exposed for Simulation in Lab
+    hookGroups: [{ category, hooks: [] }],
+    scripts: [{ title, type, format, beats: [], note }],
+    publicCaption, sourceNote,
+  },
   reflection,
   claimIds: [],
   evidenceIds: [],
@@ -112,6 +123,7 @@ Homepage selection additionally requires an integer `homepagePriority`. Validati
   projectId,
   label,
   value,
+  kind,                       // efficiency, output, content result, test, context or rule
   context,
   evidenceStatus,
   evidenceIds: [],
@@ -128,7 +140,9 @@ Evidence status:
 - `USER_VERIFIED`
 - `NEEDS_VERIFICATION`
 
-`sourceNote` is governance-only and stripped by selectors. Quick Proof is an ordered list of claim IDs, not duplicated values. The selector excludes `NEEDS_VERIFICATION` automatically.
+`sourceNote` is governance-only and stripped by selectors. Quick Proof references claim IDs rather than duplicating values. The selector excludes `NEEDS_VERIFICATION` automatically and orders eligible claims by kind.
+
+Every claim requires a `CLAIM_KIND`: `EFFICIENCY`, `WORK_OUTPUT`, `CONTENT_RESULT`, `TEST_RESULT`, `BUSINESS_CONTEXT` or `BUSINESS_RULE`. The public selector prioritizes efficiency and work results. Case heroes show at most two result claims; business scope and operating rules remain in the context section, with their original captions. A sample test result is labeled as sample verification and retains its production-accuracy limitation. Account totals retain the statement that they are not personal growth attribution.
 
 ## 7. Evidence
 

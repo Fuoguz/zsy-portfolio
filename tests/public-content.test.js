@@ -2,9 +2,11 @@ import assert from "node:assert/strict";
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import test from "node:test";
+import { getCaseClaimGroups } from "../src/utils/claim-presentation.js";
 
 import {
   getHomePageContent,
+  getHomeFeaturedProjects,
   getAboutPageContent,
   getCapabilityEvidenceMap,
   getPublicProject,
@@ -44,15 +46,35 @@ test("homepage model contains only selector-approved projects and claims", () =>
     "eaglehub",
     "onboarding-automation",
     "ai-content-growth-workflow",
+    "globridge",
   ]);
   assert.deepEqual(home.quickProofs.map((claim) => claim.value), [
+    "2h → 20–30min",
     "400–500 人",
     "≈480 对",
-    "2h → 20–30min",
   ]);
   assert.ok(home.startProjects.every((project) => project.evidence.length > 0));
   assert.equal(home.labProjects.some((project) => project.slug === "digest"), false);
   assertPublicSafe(home);
+});
+
+test("case claim presentation prioritizes efficiency and keeps scale and rules in context", () => {
+  const growth = getCaseClaimGroups(getPublicProject("ai-content-growth-workflow"));
+  assert.deepEqual(growth.hero.map(claim => claim.id), ["content-growth-cycle", "content-growth-cadence"]);
+  assert.equal(growth.context[0].id, "content-growth-account");
+  assert.match(growth.context[0].publicCaption, /不归因为本人增长/);
+  assert.equal(growth.remainingResults[0].id, "content-growth-top-article");
+
+  const eagle = getCaseClaimGroups(getPublicProject("eaglehub"));
+  assert.equal(eagle.hero.length, 0);
+  assert.deepEqual(eagle.context.map(claim => claim.id), ["eaglehub-mentor-pairs", "eaglehub-cycle"]);
+  const team = getCaseClaimGroups(getPublicProject("team-formation-platform"));
+  assert.equal(team.hero.length, 0);
+  assert.equal(team.context.find(claim => claim.id === "team-formation-rules").kind, "BUSINESS_RULE");
+
+  const sample = getCaseClaimGroups(getPublicProject("onboarding-automation")).hero[0];
+  assert.equal(sample.kind, "TEST_RESULT");
+  assert.match(sample.publicCaption, /特定 Dry-run.*不代表生产准确率/);
 });
 
 test("resume policy exposes only the privacy-safe public PDF", () => {
@@ -70,6 +92,7 @@ test("work index separates featured, business evidence and lab without equal wei
     "eaglehub",
     "onboarding-automation",
     "ai-content-growth-workflow",
+    "globridge",
   ]);
   assert.ok(work.business.some((project) => project.slug === "team-formation-platform"));
   assert.ok(work.business.some((project) => project.slug === "eagle-training-operations"));
@@ -112,9 +135,29 @@ test("capability evidence mapping reuses public projects and filters hidden work
   assert.ok(mapping.some((capability) => capability.projectIds.includes("eaglehub")));
   assert.ok(mapping.some((capability) => capability.projectIds.includes("onboarding-automation")));
   assert.ok(mapping.every((capability) => capability.projects.every((project) => project.slug && project.evidence.length)));
-  assert.equal(serialized.includes("globridge"), false);
+  assert.equal(serialized.includes("globridge"), true);
   assert.equal(serialized.includes("digest"), false);
   assertPublicSafe(mapping);
+});
+
+test("Globridge is a shipped case with public provenance and bounded AI delivery mapping", () => {
+  const project = getPublicProject("globridge");
+  assert.equal(project.deliveryStatus, "SHIPPED");
+  assert.equal(project.decisions.length, 7);
+  assert.match(project.decisionStory.options[project.decisionStory.selectedOption], /保留 CloudBase 后端/);
+  assert.match(project.decisionStory.problem, /交接信息并不完整/);
+  assert.ok(project.decisionStory.validation.some(item => item.includes("/sandbox/")));
+  assert.equal(project.decisionStory.publicCaption, "本人项目经历说明");
+  assert.ok(project.evidence.every(item => item.publicSafe && item.provenanceLabel === "真实公开作品"));
+  assert.equal(project.evidence.find(item => item.type === "LIVE_DEMO").asset, "https://www.globridge.cn/");
+  assert.ok(project.evidence.some(item => item.type === "VIDEO"));
+  assert.match(project.contributionBoundary.notClaimed.join(" "), /业务数字、客户案例与市场成绩/);
+  assert.equal(project.claims.length, 0);
+  for (const lens of ["aiNative", "aiProduct", "productOps", "projectOps"]) {
+    assert.ok(getRoleViewContent(lens).projects.some(item => item.id === "globridge"));
+  }
+  assert.ok(getRolePageContent("ai-native").projects.some(item => item.id === "globridge"));
+  assertPublicSafe(project);
 });
 
 test("case study model renders only real optional sections and safe evidence", () => {
@@ -146,6 +189,25 @@ test("role views reorder one shared public project source", () => {
     new Set(product.allProjects.map((project) => project.id)),
   );
   assertPublicSafe(product);
+});
+
+test("home role sorting changes the lead without losing or duplicating featured projects", () => {
+  const home = getHomePageContent();
+  const defaults = getHomeFeaturedProjects();
+  assert.deepEqual(defaults.map((project) => project.id), home.featuredProjects.map((project) => project.id));
+  assert.equal(getHomeFeaturedProjects("growth")[0].slug, "ai-content-growth-workflow");
+  for (const lens of home.roleLenses) {
+    const sorted = getHomeFeaturedProjects(lens.id);
+    assert.equal(sorted.length, defaults.length);
+    assert.deepEqual(new Set(sorted.map((project) => project.id)), new Set(defaults.map((project) => project.id)));
+    if (lens.id !== "all") {
+      for (let index = 1; index < sorted.length; index++) {
+        assert.ok((sorted[index - 1].roleLensRelevance[lens.id] ?? 0) >= (sorted[index].roleLensRelevance[lens.id] ?? 0));
+      }
+    }
+    assertPublicSafe(sorted);
+  }
+  assert.deepEqual(getHomeFeaturedProjects("unknown"), defaults);
 });
 
 test("route-level role pages reuse shared projects and about remains public-safe", () => {
@@ -197,7 +259,6 @@ test("production public facade is backed by a generated sanitized snapshot", () 
     "INTERNAL_ONLY",
     "REDACTION_REQUIRED",
     "NEEDS_VERIFICATION",
-    "globridge",
     "digest",
   ]) {
     assert.equal(generatedSource.includes(token), false, `generated public snapshot leaked ${token}`);

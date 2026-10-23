@@ -1,3 +1,5 @@
+import { projectTitleZh } from "./presentation.js";
+
 const ensureMeta = (name) => {
   let element = document.head.querySelector(`meta[name="${name}"]`);
   if (!element) {
@@ -33,9 +35,9 @@ const absoluteAsset = (asset) => new URL(asset, `${window.location.origin}${impo
 export function applyRouteMetadata(route, project = null) {
   if (typeof document === "undefined") return;
 
-  const title = project ? `${project.shortTitle} — Zhang Shaoyi` : route.title;
+  const title = project ? `${projectTitleZh(project)} — 张少毅` : route.title;
   const description = project?.summary || route.description;
-  const canonical = new URL(window.location.pathname, window.location.origin).href;
+  const canonical = new URL(`${window.location.pathname.replace(/\/+$/, "")}/`, window.location.origin).href;
   const socialImage = absoluteAsset("og-image.png");
   const noIndex = route.id === "not-found" || route.id === "experiment";
 

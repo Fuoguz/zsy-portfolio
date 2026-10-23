@@ -1,7 +1,7 @@
 # ZSY Portfolio V2 — Content Source of Truth
 
-> 版本：G5A Evidence Refresh  
-> 更新日期：2026-09-03  
+> 版本：Globridge Public Case Integration / 沙盘接入决策
+> 更新日期：2026-10-03
 > 用途：G4 及之后所有公开文案、项目数据、Resume 对齐与 Case Study 写作的唯一事实基线。若其他文档与本文件冲突，以本文件为准。  
 > 边界：本文件记录用户确认事实与公开规则，不补全未确认信息，不把内部状态直接显示给招聘者。
 
@@ -112,9 +112,9 @@ Role Lens 是招聘者浏览视图，不是职位头衔。它只改变推荐顺�
 - 自由组队平台 — `REAL PROJECT / INTERNAL TOOL / SHIPPED / USED`
 - 雏鹰专项集训 — 作为 Project Ops / Experience evidence，不伪装成软件产品
 
-### Potential Featured Case
+### Public Full-stack Case
 
-- Globridge — `NEEDS_CONTENT`；未补齐公开内容前不进入默认 Top 3
+- Globridge 出海咨询官网 — `REAL PROJECT / FULL-STACK DEVELOPMENT / SHIPPED`；首页第四个精选入口，保留现有前三项顺序。
 
 ### Lab / Experiments
 
@@ -184,13 +184,33 @@ Role Lens 是招聘者浏览视图，不是职位头衔。它只改变推荐顺�
 
 | Field | Source of truth | State |
 | --- | --- | --- |
-| Candidate type | AI 辅助全栈业务系统 | `USER_VERIFIED` |
-| Existing scope | 存量代码理解、需求拆解、功能迭代、前后端接口联调、问题排查、云部署维护；使用 Codex 等 AI 开发工具 | `USER_VERIFIED` |
-| Missing | 项目背景、真实职责、时间、截图、交付结果、可公开范围 | `NEEDS_CONTENT` |
+| Name / URL | Globridge 出海咨询官网 / https://www.globridge.cn/ | USER_VERIFIED 2026-09-10 |
+| Classification / status | REAL PROJECT / FULL-STACK DEVELOPMENT / SHIPPED | USER_VERIFIED |
+| Public role | 全栈开发 / AI-assisted Full-stack Development | USER_VERIFIED |
+| Contribution | 存量代码理解、需求拆解、前端功能与页面迭代、后端 / API 联调、问题排查、云端部署维护；使用 Codex 等 AI 开发工具 | USER_VERIFIED，历史范围与本轮确认 |
+| Evidence | 公开首页、服务区域、移动端截图与 7 秒静音真实录屏 | 2026-09-10 实际浏览采集 |
+| Boundaries | 不归因网站业务数字、客户案例、市场成绩；不宣称从零独立开发全部系统 | CONFIRMED |
 
-未补齐前只作为 Potential Featured Case，不自动进入 Top 3。
+公开叙事：接手 → 理解 → 拆解 → 构建 → 联调 → 调试 → 上线。AI 辅助代码理解与实现；本人判断修改范围、上下文适配与实际运行问题。未有材料证明的具体 Bug、技术栈、开发日期与量化成绩继续省略。公开网站画面证明页面运行，不单独证明个人贡献或后端实现。
+
+2026-10-03 用户补充的具体决策（USER_VERIFIED）：
+
+- 问题：已经独立运行的沙盘要接入 globridge.cn；原网站服务器部署、Nginx 与构建方式等交接信息不完整。沙盘已有可用前端和腾讯 CloudBase 云函数后端。
+- 备选方案：按原网站架构重构沙盘；将云函数和数据逻辑迁移到网站服务器；保留已验证的 CloudBase 后端，将沙盘作为独立模块接入现有网站。
+- 采用第三种方案：改动范围最小，不依赖尚未掌握的服务器环境，也避免为技术统一重新实现可用后端。
+- 接入前验证：`/sandbox/` 静态资源路径、CloudBase Web 安全域名、云函数 HTTP 地址、前后端实际调用。
+- 推进条件：确认页面正常访问、核心功能能够调用后，继续网站集成与后续迭代。
+- 来源：用户在当前对话中对本人项目经历的说明；暂无本次沙盘接入的提交级证据或验证输出附件。不推断具体云函数地址、环境标识、沙盘业务指标、上线日期或性能结果。
+
+历史核对：本仓库提交 62338e3 的本节已记录上述贡献范围，未含 Globridge 源码提交级证据。当前用户确认覆盖旧的 potential / hidden 限制。
 
 ### 6.6 Lab records
+
+2026-10-06 内容补充：发现 `src/App.jsx` 已包含 3 类 / 12 条模拟广告开头与 4 组带时间节奏的脚本草稿，迁移至 `src/data/game-ads-drafts.js` 并接入现有稳定案例 URL。覆盖休闲、SLG 与卡牌方向，演员反应、评论、群聊与弹幕均属于草稿情节。未制作投放素材、未提供广告效果数据；旧版“计划输出”不计为实际产出。该记录取代本节先前“没有公开附件，仅简短介绍”的临时展示状态。五个业务案例的摘要与做法只基于既有事实改写，不新增技术栈、职责、日期、故障案例或量化效果。
+
+2026-10-06：创意实验在首页、项目索引与 Creative 页复用同一作品组件。可直接打开 Memory Museum 体验入口及《照见痕迹》的 Bilibili 成片。没有公开附件的广告脚本模拟仅展示简短练习介绍，保留原稳定 URL，不再通过卡片承诺完整案例。Bilibili 页面及播放器可打开，但截帧尝试出现登录弹窗与自动连播切换；未取得可确认归属于该作品的干净截图，不新增视觉证据或虚构分镜。封面与脚本附件缺口继续保留。
+
+2026-10-03：Memory Museum 补充历史源码中的公开体验地址 `https://memory-museum-pi.vercel.app/`。本次浏览器核验覆盖首页与童年展厅问答入口；未提交回答，未验证 AI 生成流程。保留实验分类，不升级为已交付生产系统。
 
 | Project | Classification | State | Public boundary |
 | --- | --- | --- | --- |
@@ -263,7 +283,7 @@ Hero identity + public positioning
 → Featured 01: EagleHub with Problem / Decision / Outcome
 → Supporting Real Work: Onboarding / Team Formation / Content Growth
 → Experience summary
-→ Potential Case: Globridge
+→ Public Full-stack Case: Globridge（精选第四入口）
 → Lab: Digest / Memory Museum / Video / Game Ads
 → Resume & Contact
 ```
@@ -294,7 +314,7 @@ G3.5 不生成新 PDF。
 - EagleHub：可公开项目背景、脱敏截图、本人功能范围、关键迭代与结果材料
 - Onboarding Automation：脱敏流程 / 匿名 UI / 测试数据、11 / 11 的字段与测试边界、下一阶段状态
 - 自由组队平台：可公开截图、使用过程或交付证据、本人搭建范围
-- Globridge：项目背景、本人职责、时间、截图、交付结果、公开范围
+- Globridge：沙盘 CloudBase 后端与接入决策已确认；具体开发日期、其余技术栈、Bug 与提交级证据可后续补充。
 - AI Content Growth：2 万+、每周 7 篇与效率变化的统计周期 / 证据映射
 - 新通教育：可公开职责、结果及旧“约 10%”口径
 
@@ -304,7 +324,7 @@ G3.5 不生成新 PDF。
 - EagleHub “早期产品方案与核心框架、AI 辅助实现”最终公开职位标签的中文 / 英文写法
 - 传音、TEX AI、传音学院三个组织名称在公开 Portfolio 中的标准层级写法
 - 内部项目可公开的截图、流程字段和组织名称范围
-- Globridge 是否及何时升级为 Featured Case
+- Globridge 已于 2026-09-10 获准升级为公开 Featured Case。
 - 未来公开 Resume 是否展示所在地
 
 ## 13. Superseded Content

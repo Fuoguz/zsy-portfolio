@@ -1,4 +1,5 @@
 import { projectTitleZh } from "../utils/presentation.js";
+import { AppLink } from "../components/navigation/AppLink.jsx";
 
 const lensLabels = {
   all: "全部",
@@ -9,15 +10,11 @@ const lensLabels = {
   aiNative: "AI 原生",
 };
 
-export function RoleLens({ lenses, activeLens, onSelect, recommendedProjects }) {
+export function RoleLens({ lenses, activeLens, onSelect, projects }) {
   return (
-    <section className="final-hybrid__role-lens" id="role-lens" aria-labelledby="role-lens-title">
-      <div className="final-hybrid__lens-title">
-        <span>岗位路径 / 阅读方式</span>
-        <h2 id="role-lens-title">按岗位阅读</h2>
-        <p>同一组真实项目，按你关心的工作方式重新排序。</p>
-      </div>
-      <div className="final-hybrid__lens-controls" role="group" aria-label="选择目标岗位">
+    <div className="portfolio-work-sort" id="role-lens">
+      <span id="role-lens-title">可选：按岗位排序</span>
+      <div className="portfolio-work-sort__controls" role="group" aria-labelledby="role-lens-title">
         {lenses.map((lens) => (
           <button
             type="button"
@@ -29,11 +26,10 @@ export function RoleLens({ lenses, activeLens, onSelect, recommendedProjects }) 
           </button>
         ))}
       </div>
-      <p className="final-hybrid__lens-summary" aria-live="polite">
-        <strong>{lensLabels[activeLens.id] || activeLens.label}</strong>
-        {activeLens.why}
-        <span>建议先看：{recommendedProjects.map((project) => projectTitleZh(project)).slice(0, 4).join(" · ")}</span>
+      <p className="portfolio-work-sort__status" role="status">
+        {activeLens.id === "all" ? `默认顺序 · ${projects.length} 个代表项目` : `已按${lensLabels[activeLens.id] || activeLens.label}相关性排序 · 首项：${projectTitleZh(projects[0])}`}
+        {activeLens.id === "aiNative" ? <AppLink to="/ai-native">查看 AI 应用与开发项目 ↗</AppLink> : null}
       </p>
-    </section>
+    </div>
   );
 }

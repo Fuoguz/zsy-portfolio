@@ -1,0 +1,31 @@
+const { chromium } = require('playwright');
+const fs = require('node:fs');
+const { execFileSync } = require('node:child_process');
+
+(async () => {
+  const out = 'public/assets/evidence/globridge';
+  fs.mkdirSync(out, { recursive: true });
+  const browser = await chromium.launch({ channel: 'chrome', headless: true });
+  const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, recordVideo: { dir: 'artifacts/globridge', size: { width: 1440, height: 900 } } });
+  const page = await context.newPage();
+  const started = Date.now();
+  await page.goto('https://www.globridge.cn/', { waitUntil: 'networkidle', timeout: 60000 });
+  await page.evaluate(() => document.fonts.ready);
+  await page.waitForTimeout(1200);
+  await page.screenshot({ path: `${out}/home.jpg`, type: 'jpeg', quality: 90 });
+  const offset = (Date.now() - started) / 1000;
+  await page.waitForTimeout(2000);
+  await page.getByRole('link', { name: '探索我们的服务', exact: true }).click();
+  await page.waitForTimeout(5000);
+  await page.screenshot({ path: `${out}/services.jpg`, type: 'jpeg', quality: 90 });
+  const video = page.video();
+  await context.close();
+  const raw = await video.path();
+  execFileSync('ffmpeg', ['-y', '-ss', String(offset), '-i', raw, '-t', '7', '-an', '-vf', 'fps=24,scale=1280:800', '-c:v', 'libvpx-vp9', '-crf', '34', '-b:v', '0', `${out}/preview.webm`], { stdio: 'ignore' });
+  const mobile = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, deviceScaleFactor: 1 });
+  await mobile.goto('https://www.globridge.cn/', { waitUntil: 'networkidle', timeout: 60000 });
+  await mobile.screenshot({ path: `${out}/mobile.jpg`, type: 'jpeg', quality: 90 });
+  fs.writeFileSync('artifacts/globridge/capture.json', JSON.stringify({ capturedAt: new Date().toISOString(), source: page.url(), viewport: '1440x900', duration: 7, action: 'Homepage animation then public services anchor; no form submission or admin access', raw }, null, 2));
+  await browser.close();
+  console.log('Captured desktop, services, mobile and silent 7-second WebM.');
+})().catch(error => { console.error(error); process.exitCode = 1; });

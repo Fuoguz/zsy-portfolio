@@ -3,10 +3,12 @@ const PROJECT_TITLES_ZH = Object.freeze({
   "onboarding-automation": "新人入职流程自动化",
   "ai-content-growth-workflow": "AI 内容增长工作流",
   "team-formation-platform": "自由组队平台",
-  "eagle-training": "雏鹰专项集训",
+  "eagle-training-operations": "雏鹰专项集训",
   "memory-museum": "记忆博物馆",
-  "video-motion": "影像与动态视觉练习",
+  "video-motion": "《照见痕迹》 · 影像练习",
   "game-ads-simulation": "游戏广告脚本模拟",
+  globridge: "Globridge 出海咨询官网",
+  digest: "Digest 内化",
 });
 
 export function projectTitleZh(project) {

@@ -1,10 +1,12 @@
 import { assetPath } from "../../utils/paths.js";
 import { ResponsiveImage } from "./ResponsiveImage.jsx";
 import { NeutralProjectVisual } from "./NeutralProjectVisual.jsx";
+import { GlobridgePreview } from "./GlobridgePreview.jsx";
 
 const isImage = (evidence) => ["SCREENSHOT", "PROCESS_DIAGRAM"].includes(evidence?.type);
 
 export function ProjectVisual({ project, compact = false, eager = false }) {
+  if (project.slug === "globridge") return <GlobridgePreview project={project} />;
   const visual = project.evidence.find((item) => item.publicSafe === true && isImage(item));
   if (!visual) return <NeutralProjectVisual project={project} compact={compact} />;
 

@@ -1,4 +1,6 @@
 import {
+  CLAIM_KIND_ORDER,
+  CLASSIFICATION,
   EVIDENCE_ORIGIN,
   EVIDENCE_STATUS,
   PUBLIC_READY_STATUSES,
@@ -6,6 +8,8 @@ import {
   REDACTION_STATUS,
   ROLE_LENS_IDS,
 } from "./schema.js";
+
+const byClaimKind = (a, b) => CLAIM_KIND_ORDER.indexOf(a.kind) - CLAIM_KIND_ORDER.indexOf(b.kind);
 
 const EVIDENCE_PROVENANCE_LABELS = Object.freeze({
   [EVIDENCE_ORIGIN.REAL_SCREENSHOT]: "真实脱敏截图",
@@ -51,6 +55,7 @@ function sanitizeEvidence(item) {
 function sanitizeClaim(claim) {
   return {
     id: claim.id,
+    kind: claim.kind,
     projectId: claim.projectId,
     label: claim.label,
     value: claim.value,
@@ -69,10 +74,35 @@ function sanitizeContributionBoundary(boundary) {
   };
 }
 
+function sanitizeDecisionStory(story) {
+  if (!story || ![EVIDENCE_STATUS.CONFIRMED, EVIDENCE_STATUS.USER_VERIFIED].includes(story.evidenceStatus)) return null;
+  return {
+    title: story.title,
+    problem: story.problem,
+    options: [...story.options],
+    selectedOption: story.selectedOption,
+    rationale: story.rationale,
+    validation: [...story.validation],
+    outcome: story.outcome,
+    publicCaption: story.publicCaption,
+  };
+}
+
+function sanitizeCreativeDrafts(project) {
+  const drafts = project.creativeDrafts;
+  if (!drafts || project.placement !== "LAB" || !project.classification.includes(CLASSIFICATION.SIMULATION)) return null;
+  return {
+    publicCaption: drafts.publicCaption,
+    hookGroups: drafts.hookGroups.map(group => ({ category: group.category, hooks: [...group.hooks] })),
+    scripts: drafts.scripts.map(script => ({ title: script.title, type: script.type, format: script.format, beats: [...script.beats], note: script.note })),
+  };
+}
+
 function toPublicProject(project, { claims, evidence }) {
   const projectClaims = claims
     .filter((claim) => project.claimIds.includes(claim.id) && isPublicVisibility(claim.visibility))
-    .map(sanitizeClaim);
+    .map(sanitizeClaim)
+    .sort(byClaimKind);
   const projectEvidence = evidence
     .filter((item) => project.evidenceIds.includes(item.id) && isPublicSafeEvidence(item))
     .map(sanitizeEvidence);
@@ -95,6 +125,8 @@ function toPublicProject(project, { claims, evidence }) {
     problem: project.problem,
     constraints: [...(project.constraints ?? [])],
     decisions: [...project.decisions],
+    decisionStory: sanitizeDecisionStory(project.decisionStory),
+    creativeDrafts: sanitizeCreativeDrafts(project),
     outcomes: [...project.outcomes],
     reflection: project.reflection ?? null,
     claims: projectClaims,
@@ -165,7 +197,8 @@ export function selectQuickProofs({ projects, claims, evidence, quickProofClaimI
       && claim.evidenceStatus !== EVIDENCE_STATUS.NEEDS_VERIFICATION
       && readyProjectIds.has(claim.projectId),
     )
-    .map(sanitizeClaim);
+    .map(sanitizeClaim)
+    .sort(byClaimKind);
 }
 
 export function selectPublicExperience(experience) {

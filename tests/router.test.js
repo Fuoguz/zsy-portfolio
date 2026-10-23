@@ -36,6 +36,12 @@ test("unknown application paths resolve to 404", () => {
   assert.equal(route.reason, "unknown-route");
 });
 
+test("malformed encoded project addresses show 404 instead of crashing", () => {
+  for (const slug of ["%", "%E0%A4%A", "%ZZ"]) {
+    assert.equal(resolveRoute(`/work/${slug}`, { basePath: "/", knownProjectSlugs }).id, "not-found");
+  }
+});
+
 test("keeps Final Hybrid and historical experiments available as visual references", () => {
   const route = resolveRoute("/zsy-portfolio/experiment/final", {
     basePath: "/zsy-portfolio/",

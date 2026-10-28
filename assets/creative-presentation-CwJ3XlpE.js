@@ -1,0 +1,1 @@
+function e(e){let t=e.evidence.filter(e=>e.publicSafe&&e.asset);return{preview:t.find(e=>e.type===`SCREENSHOT`),experience:t.find(e=>e.type===`LIVE_DEMO`),video:t.find(e=>e.type===`VIDEO`),hasMaterials:t.length>0||!!e.creativeDrafts?.scripts.length}}export{e as t};
